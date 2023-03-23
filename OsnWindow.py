@@ -35,7 +35,7 @@ class Window(QMainWindow):
 
         self.base = QtWidgets.QPushButton(self.centralwidget)
         self.base.setGeometry(QtCore.QRect(40, 370, 211, 45))
-        self.base.setStyleSheet("background-color: rgb(238, 212, 189);\nborder: none;")
+        self.base.setStyleSheet("border: none;")
         self.base.setText("Главная")
         self.base.clicked.connect(self.baseWindow)
 
@@ -255,6 +255,7 @@ class Window(QMainWindow):
         self.new_pain.setGeometry(QtCore.QRect(760, 450, 180, 100))
         self.new_pain.setStyleSheet(color3)
         self.new_pain.setText("Добавить\nплохое\nсамочувствие")
+        self.new_pain.clicked.connect(self.addPein)
 
         self.new_stress = QtWidgets.QPushButton(self.centralwidget)
         self.new_stress.setGeometry(QtCore.QRect(760, 570, 180, 100))
@@ -264,17 +265,69 @@ class Window(QMainWindow):
 ########################################################################################################################
 
         self.zametki = QtWidgets.QPlainTextEdit(self.centralwidget)
-        self.zametki.setGeometry(QtCore.QRect(970, 450, 910, 600))
+        self.zametki.setGeometry(QtCore.QRect(970, 450, 910, 530))
+
+######## Страница советов ##############################################################################################
+
+        self.fonSoveta1 = QtWidgets.QLabel(self.centralwidget)
+        self.fonSoveta1.hide()
+        self.fonSoveta1.setGeometry(QtCore.QRect(300, 23, 640, 400))
+        self.fonSoveta1.setStyleSheet(color2)
+
+        self.fonSoveta2 = QtWidgets.QLabel(self.centralwidget)
+        self.fonSoveta2.hide()
+        self.fonSoveta2.setGeometry(QtCore.QRect(970, 23, 640, 400))
+        self.fonSoveta2.setStyleSheet(color2)
+
+        self.sovet_1 = QtWidgets.QLabel(self.centralwidget)
+        self.sovet_1.hide()
+        self.sovet_1.setGeometry(QtCore.QRect(310, 33, 620, 380))
+        self.sovet_1.setAlignment(QtCore.Qt.AlignCenter)
+        self.sovet_1.setText("Когда-то тут будут советы для хорошего самочувствия")
+        self.sovet_1.setStyleSheet(color2)
+
+        self.sovet_2 = QtWidgets.QLabel(self.centralwidget)
+        self.sovet_2.hide()
+        self.sovet_2.setGeometry(QtCore.QRect(980, 33, 620, 380))
+        self.sovet_2.setAlignment(QtCore.Qt.AlignCenter)
+        self.sovet_2.setText("Когда-то тут будут советы для хорошего самочувствия")
+        self.sovet_2.setStyleSheet(color2)
+
+######## Страница аккаунта #############################################################################################
+
+######## Страница настроек #############################################################################################
+
+######## Меню добавления стресса #######################################################################################
+
+        self.fonAddPein = QtWidgets.QLabel(self.centralwidget)
+        self.fonAddPein.hide()
+        self.fonAddPein.setGeometry(QtCore.QRect(970, 450, 910, 530))
+        self.fonAddPein.setStyleSheet(color2)
+
+        self.add_new_pein = QtWidgets.QPushButton(self.centralwidget)
+        self.add_new_pein.hide()
+        self.add_new_pein.setGeometry(QtCore.QRect(1650, 900, 180, 60))
+        self.add_new_pein.setStyleSheet(color3)
+        self.add_new_pein.setText("Добавить")
+
+########################################################################################################################
 
         self.mySetFont()
         self.weather()
+
+    def addPein(self):
+        self.new_pain.hide()
+        self.fonAddPein.show()
+        self.add_new_pein.show()
+
+
 
     def logon(self):
         self.loginIn.hide()
         self.exit.show()
 
     def baseWindow(self):
-        self.base.setStyleSheet("background-color: rgb(238, 212, 189);\nborder: none;")
+        self.base.setStyleSheet("border: none;")
         self.base.setGeometry(QtCore.QRect(40, 370, 211, 45))
 
         color = "background-color: rgb(173, 175, 219);\nborder: none;"
@@ -284,6 +337,10 @@ class Window(QMainWindow):
         self.profile.setGeometry(QtCore.QRect(25, 490, 180, 45))
         self.setting.setStyleSheet(color)
         self.setting.setGeometry(QtCore.QRect(25, 550, 180, 45))
+
+        self.hideSovets()
+        self.hideProfile()
+        self.hideSetting()
 
         self.calendar.show()
         self.fon.show()
@@ -327,7 +384,7 @@ class Window(QMainWindow):
         self.zametki.show()
 
     def sovetsWindow(self):
-        self.sovets.setStyleSheet("background-color: rgb(238, 212, 189);\nborder: none;")
+        self.sovets.setStyleSheet("border: none;")
         self.sovets.setGeometry(QtCore.QRect(40, 430, 211, 45))
 
         color = "background-color: rgb(173, 175, 219);\nborder: none;"
@@ -338,10 +395,17 @@ class Window(QMainWindow):
         self.setting.setStyleSheet(color)
         self.setting.setGeometry(QtCore.QRect(25, 550, 180, 45))
 
-        self.hideAll()
+        self.hideBase()
+        self.hideProfile()
+        self.hideSetting()
+
+        self.fonSoveta1.show()
+        self.fonSoveta2.show()
+        self.sovet_1.show()
+        self.sovet_2.show()
 
     def profileWindow(self):
-        self.profile.setStyleSheet("background-color: rgb(238, 212, 189);\nborder: none;")
+        self.profile.setStyleSheet("border: none;")
         self.profile.setGeometry(QtCore.QRect(40, 490, 211, 45))
 
         color = "background-color: rgb(173, 175, 219);\nborder: none;"
@@ -352,10 +416,12 @@ class Window(QMainWindow):
         self.setting.setStyleSheet(color)
         self.setting.setGeometry(QtCore.QRect(25, 550, 180, 45))
 
-        self.hideAll()
+        self.hideBase()
+        self.hideSovets()
+        self.hideSetting()
 
     def settingWindow(self):
-        self.setting.setStyleSheet("background-color: rgb(238, 212, 189);\nborder: none;")
+        self.setting.setStyleSheet("border: none;")
         self.setting.setGeometry(QtCore.QRect(40, 550, 211, 45))
 
         color = "background-color: rgb(173, 175, 219);\nborder: none;"
@@ -366,53 +432,14 @@ class Window(QMainWindow):
         self.profile.setStyleSheet(color)
         self.profile.setGeometry(QtCore.QRect(25, 490, 180, 45))
 
-        self.hideAll()
+        self.hideBase()
+        self.hideSovets()
+        self.hideProfile()
 
     def exitWindow(self):
         self.loginIn.show()
 
-    def mySetFont(self):
-        font = QtGui.QFont()
-        font.setFamily("Segoe UI")
-        font.setPointSize(10)
-
-        self.setFont(font)
-        self.calendar.setFont(font)
-        self.loginIn.setFont(font)
-        self.exit.setFont(font)
-        self.profile.setFont(font)
-        self.base.setFont(font)
-        self.setting.setFont(font)
-        self.sovets.setFont(font)
-        self.label_todey.setFont(font)
-        self.label_now.setFont(font)
-        self.label_weather_now.setFont(QtGui.QFont("Segoe UI", 15))
-        self.label_tomorrow.setFont(font)
-        self.label_tomorrow_2.setFont(font)
-        self.label_tomorrow_3.setFont(font)
-        self.label_tomorrow_4.setFont(font)
-        self.label_tomorrow_5.setFont(font)
-        self.label_weather_tomorrow_2.setFont(font)
-        self.label_weather_tomorrow_3.setFont(font)
-        self.label_weather_tomorrow_4.setFont(font)
-        self.label_weather_tomorrow_5.setFont(font)
-        self.label_today_00.setFont(font)
-        self.label_today_03.setFont(font)
-        self.label_today_06.setFont(font)
-        self.label_today_09.setFont(font)
-        self.label_today_12.setFont(font)
-        self.label_today_15.setFont(font)
-        self.label_today_18.setFont(font)
-        self.label_today_21.setFont(font)
-        self.new_pain.setFont(font)
-        self.new_stress.setFont(font)
-        self.label_fakt.setFont(font)
-        self.checkStress.setFont(font)
-        self.checkAlko.setFont(font)
-        self.label_kolvo_sna.setFont(font)
-        self.label_son.setFont(font)
-
-    def hideAll(self):
+    def hideBase(self):
         self.calendar.hide()
         self.fon.hide()
         self.line.hide()
@@ -454,6 +481,66 @@ class Window(QMainWindow):
         self.new_stress.hide()
         self.zametki.hide()
 
+    def hideSovets(self):
+        self.fonSoveta1.hide()
+        self.fonSoveta2.hide()
+        self.sovet_1.hide()
+        self.sovet_2.hide()
+
+    def hideProfile(self):
+        self.fonSoveta1.hide()
+
+    def hideSetting(self):
+        self.fonSoveta1.hide()
+
+
+    def mySetFont(self):
+        font = QtGui.QFont()
+        font.setFamily("Segoe UI")
+        font.setPointSize(10)
+
+        self.setFont(font)
+        self.calendar.setFont(font)
+        self.loginIn.setFont(font)
+        self.exit.setFont(font)
+        self.profile.setFont(font)
+        self.base.setFont(font)
+        self.setting.setFont(font)
+        self.sovets.setFont(font)
+        self.label_todey.setFont(font)
+        self.label_now.setFont(font)
+        self.label_weather_now.setFont(QtGui.QFont("Segoe UI", 15))
+        self.label_tomorrow.setFont(font)
+        self.label_tomorrow_2.setFont(font)
+        self.label_tomorrow_3.setFont(font)
+        self.label_tomorrow_4.setFont(font)
+        self.label_tomorrow_5.setFont(font)
+        self.label_weather_tomorrow.setFont(font)
+        self.label_weather_tomorrow_2.setFont(font)
+        self.label_weather_tomorrow_3.setFont(font)
+        self.label_weather_tomorrow_4.setFont(font)
+        self.label_weather_tomorrow_5.setFont(font)
+        self.label_today_00.setFont(font)
+        self.label_today_03.setFont(font)
+        self.label_today_06.setFont(font)
+        self.label_today_09.setFont(font)
+        self.label_today_12.setFont(font)
+        self.label_today_15.setFont(font)
+        self.label_today_18.setFont(font)
+        self.label_today_21.setFont(font)
+        self.new_pain.setFont(font)
+        self.new_stress.setFont(font)
+        self.label_fakt.setFont(font)
+        self.checkStress.setFont(font)
+        self.checkAlko.setFont(font)
+        self.label_kolvo_sna.setFont(font)
+        self.label_son.setFont(font)
+
+        self.sovet_1.setFont(font)
+        self.sovet_2.setFont(font)
+
+        self.add_new_pein.setFont(font)
+
     def weather(self):
         segodna = 0
         s_city = "Saint Petersburg"
@@ -492,6 +579,7 @@ class Window(QMainWindow):
             data = res.json()
             segodna = data['list'][0]['dt_txt'][8:10]
             co = 0
+
             for i in data['list']:
                 if i['dt_txt'][11:13] == '00' and i['dt_txt'][8:10] == segodna:
                     l__00 = '{0:+3.0f}'.format(i['main']['temp'])
@@ -509,17 +597,19 @@ class Window(QMainWindow):
                     l__18 = '{0:+3.0f}'.format(i['main']['temp'])
                 if i['dt_txt'][11:13] == '21' and i['dt_txt'][8:10] == segodna:
                     l__21 = '{0:+3.0f}'.format(i['main']['temp'])
-                if i['dt_txt'][8:10] == segodna + 1:
-                    weath_tomm += '{0:+3.0f}'.format(i['main']['temp'])
-                if i['dt_txt'][8:10] == segodna + 2:
-                    weath_tomm2 += '{0:+3.0f}'.format(i['main']['temp'])
-                if i['dt_txt'][8:10] == segodna + 3:
-                    weath_tomm3 += '{0:+3.0f}'.format(i['main']['temp'])
-                if i['dt_txt'][8:10] == segodna + 4:
-                    weath_tomm4 += '{0:+3.0f}'.format(i['main']['temp'])
-                if i['dt_txt'][8:10] == segodna + 5:
-                    weath_tomm5 += '{0:+3.0f}'.format(i['main']['temp'])
+                if int(i['dt_txt'][8:10]) == int(segodna) + 1:
+                    weath_tomm += i['main']['temp']
+                if int(i['dt_txt'][8:10]) == int(segodna) + 2:
+                    weath_tomm2 += i['main']['temp']
+                if int(i['dt_txt'][8:10]) == int(segodna) + 3:
+                    weath_tomm3 += i['main']['temp']
+                if int(i['dt_txt'][8:10]) == int(segodna) + 4:
+                    weath_tomm4 += i['main']['temp']
+                if int(i['dt_txt'][8:10]) == int(segodna) + 5:
+                    weath_tomm5 += i['main']['temp']
                     co += 1
+
+            weath_tomm5 /= co
 
         except Exception as e:
             print("Exception (weather):", e)
@@ -561,4 +651,8 @@ class Window(QMainWindow):
         self.horizontalLayout_today2.addWidget(self.label_today_21)
 
         # Погода на следующие дни
-        self.label_weather_tomorrow.setText(str(weath_tomm))
+        self.label_weather_tomorrow.setText(str(round(weath_tomm / 8)))
+        self.label_weather_tomorrow_2.setText(str(round(weath_tomm2 / 8)))
+        self.label_weather_tomorrow_3.setText(str(round(weath_tomm3 / 8)))
+        self.label_weather_tomorrow_4.setText(str(round(weath_tomm4 / 8)))
+        self.label_weather_tomorrow_5.setText(str(round(weath_tomm5)))
