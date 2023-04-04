@@ -5,541 +5,811 @@ import requests
 
 class Window(QMainWindow):
     def __init__(self):
-        color1 = "background-color: rgb(238, 212, 189);"  # бежевый
-        color2 = "background-color: rgb(219, 173, 175);"  # розовый
-        color3 = "background-color: rgb(173, 175, 219);\nborder: none;"  # синий для кнопок
-
         super(Window, self).__init__()
         self.setWindowTitle("Трекер плохого самочувствия")
         self.resize(1910, 1080)
-        self.setStyleSheet(color1)
+        self.setWindowIcon(QtGui.QIcon('photo/icon.png'))
 
         self.centralwidget = QtWidgets.QWidget(self)
         self.setCentralWidget(self.centralwidget)
 
+        self.btns = []
+        self.fons = []
+        self.ggvp = []
+        self.winAddpein = []
+        self.leftMenu = []
+        self.winAkkIN = []
+        self.winAkk = []
+        self.winAkkCreate = []
+        self.winSovet = []
+        self.winSetting = []
+
+        with open('files/color.txt', 'r') as f:
+            self.color1 = f.readline()
+            self.color2 = f.readline()
+            self.color3 = f.readline()
+            self.color4 = f.readline()
 ######## Меню ##########################################################################################################
 
         self.fon_menu = QtWidgets.QLabel(self.centralwidget)
         self.fon_menu.setGeometry(QtCore.QRect(0, 0, 251, 1080))
-        self.fon_menu.setStyleSheet("background-color: rgb(205, 185, 172);")
 
         self.photo = QtWidgets.QLabel(self.centralwidget)
         self.photo.setGeometry(QtCore.QRect(25, 23, 180, 180))
-        self.photo.setStyleSheet(color2)
-
-        self.loginIn = QtWidgets.QPushButton(self.centralwidget)
-        self.loginIn.setGeometry(QtCore.QRect(25, 210, 180, 45))
-        self.loginIn.setStyleSheet(color3)
-        self.loginIn.setText("Войти")
-        self.loginIn.clicked.connect(self.logon)
+        self.fons.append(self.photo)
+        self.leftMenu.append(self.photo)
 
         self.base = QtWidgets.QPushButton(self.centralwidget)
         self.base.setGeometry(QtCore.QRect(40, 370, 211, 45))
-        self.base.setStyleSheet("border: none;")
         self.base.setText("Главная")
         self.base.clicked.connect(self.baseWindow)
+        self.btns.append(self.base)
+        self.leftMenu.append(self.base)
 
         self.sovets = QtWidgets.QPushButton(self.centralwidget)
         self.sovets.setGeometry(QtCore.QRect(25, 430, 180, 45))
-        self.sovets.setStyleSheet(color3)
         self.sovets.setText("Советы")
         self.sovets.clicked.connect(self.sovetsWindow)
+        self.btns.append(self.sovets)
+        self.leftMenu.append(self.sovets)
 
         self.profile = QtWidgets.QPushButton(self.centralwidget)
         self.profile.setGeometry(QtCore.QRect(25, 490, 180, 45))
-        self.profile.setStyleSheet(color3)
         self.profile.setText("Аккаунт")
         self.profile.clicked.connect(self.profileWindow)
+        self.btns.append(self.profile)
+        self.leftMenu.append(self.profile)
 
         self.setting = QtWidgets.QPushButton(self.centralwidget)
         self.setting.setGeometry(QtCore.QRect(25, 550, 180, 45))
-        self.setting.setStyleSheet(color3)
         self.setting.setText("Настройки")
         self.setting.clicked.connect(self.settingWindow)
+        self.btns.append(self.setting)
+        self.leftMenu.append(self.setting)
 
-        self.exit = QtWidgets.QPushButton(self.centralwidget)
-        self.exit.setGeometry(QtCore.QRect(24, 850, 180, 45))
-        self.exit.setStyleSheet(color3)
-        self.exit.setText("Выйти из акаунта")
-        self.exit.clicked.connect(self.exitWindow)
-
-######## Календарь #####################################################################################################
+######## Календарь и заметки ###########################################################################################
 
         self.calendar = QtWidgets.QCalendarWidget(self.centralwidget)
         self.calendar.setGeometry(QtCore.QRect(300, 23, 640, 400))
-        self.calendar.setStyleSheet(color2 + "\ngridline-color: rgb(219, 195, 173);")
         self.calendar.setGridVisible(True)
         self.calendar.setVerticalHeaderFormat(QtWidgets.QCalendarWidget.NoVerticalHeader)
+        self.ggvp.append(self.calendar)
+
+        self.zametki = QtWidgets.QPlainTextEdit(self.centralwidget)
+        self.zametki.setGeometry(QtCore.QRect(970, 450, 910, 523))
+        self.fons.append(self.zametki)
+        self.ggvp.append(self.zametki)
 
 ######## Дизайн виджета погоды #########################################################################################
 
         self.fon = QtWidgets.QLabel(self.centralwidget)
         self.fon.setGeometry(QtCore.QRect(970, 23, 640, 400))
-        self.fon.setStyleSheet(color2)
+        self.fons.append(self.fon)
+        self.ggvp.append(self.fon)
 
         self.line = QtWidgets.QFrame(self.centralwidget)
         self.line.setGeometry(QtCore.QRect(1180, 25, 10, 235))
-        self.line.setStyleSheet(color2)
         self.line.setFrameShape(QtWidgets.QFrame.VLine)
         self.line.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.fons.append(self.line)
+        self.ggvp.append(self.line)
 
         self.line_3 = QtWidgets.QFrame(self.centralwidget)
         self.line_3.setGeometry(QtCore.QRect(1098, 250, 10, 170))
-        self.line_3.setStyleSheet(color2)
         self.line_3.setFrameShape(QtWidgets.QFrame.VLine)
         self.line_3.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.fons.append(self.line_3)
+        self.ggvp.append(self.line_3)
 
         self.line_4 = QtWidgets.QFrame(self.centralwidget)
         self.line_4.setGeometry(QtCore.QRect(1226, 250, 10, 170))
-        self.line_4.setStyleSheet(color2)
         self.line_4.setFrameShape(QtWidgets.QFrame.VLine)
         self.line_4.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.fons.append(self.line_4)
+        self.ggvp.append(self.line_4)
 
         self.line_5 = QtWidgets.QFrame(self.centralwidget)
         self.line_5.setGeometry(QtCore.QRect(1354, 250, 10, 170))
-        self.line_5.setStyleSheet(color2)
         self.line_5.setFrameShape(QtWidgets.QFrame.VLine)
         self.line_5.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.fons.append(self.line_5)
+        self.ggvp.append(self.line_5)
 
         self.line_6 = QtWidgets.QFrame(self.centralwidget)
         self.line_6.setGeometry(QtCore.QRect(1482, 250, 10, 170))
-        self.line_6.setStyleSheet(color2)
         self.line_6.setFrameShape(QtWidgets.QFrame.VLine)
         self.line_6.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.fons.append(self.line_6)
+        self.ggvp.append(self.line_6)
 
         self.line_2 = QtWidgets.QFrame(self.centralwidget)
         self.line_2.setGeometry(QtCore.QRect(970, 250, 640, 10))
-        self.line_2.setStyleSheet(color2)
         self.line_2.setFrameShape(QtWidgets.QFrame.HLine)
         self.line_2.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.fons.append(self.line_2)
+        self.ggvp.append(self.line_2)
 
 ######## Погода сейчас #################################################################################################
 
         self.label_now = QtWidgets.QLabel(self.centralwidget)
         self.label_now.setGeometry(QtCore.QRect(970, 23, 200, 60))
-        self.label_now.setStyleSheet(color2)
         self.label_now.setAlignment(QtCore.Qt.AlignCenter)
         self.label_now.setText("Сейчас")
+        self.fons.append(self.label_now)
+        self.ggvp.append(self.label_now)
 
         self.label_weather_now = QtWidgets.QLabel(self.centralwidget)
         self.label_weather_now.setGeometry(QtCore.QRect(975, 105, 200, 80))
-        self.label_weather_now.setStyleSheet(color2)
         self.label_weather_now.setAlignment(QtCore.Qt.AlignCenter)
+        self.fons.append(self.label_weather_now)
+        self.ggvp.append(self.label_weather_now)
 
 ######## Погода сегодня ################################################################################################
 
         self.label_todey = QtWidgets.QLabel(self.centralwidget)
         self.label_todey.setGeometry(QtCore.QRect(1190, 23, 390, 60))
-        self.label_todey.setStyleSheet(color2)
         self.label_todey.setAlignment(QtCore.Qt.AlignCenter)
         self.label_todey.setText("Сегодня")
+        self.fons.append(self.label_todey)
+        self.ggvp.append(self.label_todey)
 
         self.horizontalLayoutWidget = QtWidgets.QWidget(self.centralwidget)
         self.horizontalLayoutWidget.setGeometry(QtCore.QRect(1190, 70, 411, 81))
+        self.ggvp.append(self.horizontalLayoutWidget)
         self.horizontalLayout_today = QtWidgets.QHBoxLayout(self.horizontalLayoutWidget)
         self.horizontalLayout_today.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout_today.setSpacing(0)
 
         self.label_today_00 = QtWidgets.QLabel(self.horizontalLayoutWidget)
-        self.label_today_00.setStyleSheet(color2)
+        self.fons.append(self.label_today_00)
+        self.ggvp.append(self.label_today_00)
 
         self.label_today_03 = QtWidgets.QLabel(self.horizontalLayoutWidget)
-        self.label_today_03.setStyleSheet(color2)
+        self.fons.append(self.label_today_03)
+        self.ggvp.append(self.label_today_03)
 
         self.label_today_06 = QtWidgets.QLabel(self.horizontalLayoutWidget)
-        self.label_today_06.setStyleSheet(color2)
+        self.fons.append(self.label_today_06)
+        self.ggvp.append(self.label_today_06)
 
         self.label_today_09 = QtWidgets.QLabel(self.horizontalLayoutWidget)
-        self.label_today_09.setStyleSheet(color2)
+        self.fons.append(self.label_today_09)
+        self.ggvp.append(self.label_today_09)
 
         self.horizontalLayoutWidget_2 = QtWidgets.QWidget(self.centralwidget)
         self.horizontalLayoutWidget_2.setGeometry(QtCore.QRect(1190, 160, 411, 81))
+        self.ggvp.append(self.horizontalLayoutWidget_2)
         self.horizontalLayout_today2 = QtWidgets.QHBoxLayout(self.horizontalLayoutWidget_2)
         self.horizontalLayout_today2.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout_today2.setSpacing(0)
 
         self.label_today_12 = QtWidgets.QLabel(self.horizontalLayoutWidget_2)
-        self.label_today_12.setStyleSheet(color2)
+        self.fons.append(self.label_today_12)
+        self.ggvp.append(self.label_today_12)
 
         self.label_today_15 = QtWidgets.QLabel(self.horizontalLayoutWidget_2)
-        self.label_today_15.setStyleSheet(color2)
+        self.fons.append(self.label_today_15)
+        self.ggvp.append(self.label_today_15)
 
         self.label_today_18 = QtWidgets.QLabel(self.horizontalLayoutWidget_2)
-        self.label_today_18.setStyleSheet(color2)
+        self.fons.append(self.label_today_18)
+        self.ggvp.append(self.label_today_18)
 
         self.label_today_21 = QtWidgets.QLabel(self.horizontalLayoutWidget_2)
-        self.label_today_21.setStyleSheet(color2)
+        self.fons.append(self.label_today_21)
+        self.ggvp.append(self.label_today_21)
 
 ######## Погода в следующие дни ########################################################################################
 
         self.label_tomorrow = QtWidgets.QLabel(self.centralwidget)
         self.label_tomorrow.setGeometry(QtCore.QRect(970, 260, 128, 40))
-        self.label_tomorrow.setStyleSheet(color2)
         self.label_tomorrow.setAlignment(QtCore.Qt.AlignCenter)
         self.label_tomorrow.setText("Завтра")
+        self.fons.append(self.label_tomorrow)
+        self.ggvp.append(self.label_tomorrow)
 
         self.label_tomorrow_2 = QtWidgets.QLabel(self.centralwidget)
         self.label_tomorrow_2.setGeometry(QtCore.QRect(1108, 260, 118, 40))
-        self.label_tomorrow_2.setStyleSheet(color2)
         self.label_tomorrow_2.setAlignment(QtCore.Qt.AlignCenter)
+        self.fons.append(self.label_tomorrow_2)
+        self.ggvp.append(self.label_tomorrow_2)
 
         self.label_tomorrow_3 = QtWidgets.QLabel(self.centralwidget)
         self.label_tomorrow_3.setGeometry(QtCore.QRect(1236, 260, 118, 40))
-        self.label_tomorrow_3.setStyleSheet(color2)
         self.label_tomorrow_3.setAlignment(QtCore.Qt.AlignCenter)
+        self.fons.append(self.label_tomorrow_3)
+        self.ggvp.append(self.label_tomorrow_3)
 
         self.label_tomorrow_4 = QtWidgets.QLabel(self.centralwidget)
         self.label_tomorrow_4.setGeometry(QtCore.QRect(1364, 260, 118, 40))
-        self.label_tomorrow_4.setStyleSheet(color2)
         self.label_tomorrow_4.setAlignment(QtCore.Qt.AlignCenter)
+        self.fons.append(self.label_tomorrow_4)
+        self.ggvp.append(self.label_tomorrow_4)
 
         self.label_tomorrow_5 = QtWidgets.QLabel(self.centralwidget)
         self.label_tomorrow_5.setGeometry(QtCore.QRect(1492, 260, 118, 40))
-        self.label_tomorrow_5.setStyleSheet(color2)
         self.label_tomorrow_5.setAlignment(QtCore.Qt.AlignCenter)
+        self.fons.append(self.label_tomorrow_5)
+        self.ggvp.append(self.label_tomorrow_5)
 
         self.label_weather_tomorrow = QtWidgets.QLabel(self.centralwidget)
         self.label_weather_tomorrow.setGeometry(QtCore.QRect(980, 300, 110, 80))
-        self.label_weather_tomorrow.setStyleSheet(color2)
         self.label_weather_tomorrow.setAlignment(QtCore.Qt.AlignCenter)
+        self.fons.append(self.label_weather_tomorrow)
+        self.ggvp.append(self.label_weather_tomorrow)
 
         self.label_weather_tomorrow_2 = QtWidgets.QLabel(self.centralwidget)
         self.label_weather_tomorrow_2.setGeometry(QtCore.QRect(1110, 300, 110, 80))
-        self.label_weather_tomorrow_2.setStyleSheet(color2)
         self.label_weather_tomorrow_2.setAlignment(QtCore.Qt.AlignCenter)
+        self.fons.append(self.label_weather_tomorrow_2)
+        self.ggvp.append(self.label_weather_tomorrow_2)
 
         self.label_weather_tomorrow_3 = QtWidgets.QLabel(self.centralwidget)
         self.label_weather_tomorrow_3.setGeometry(QtCore.QRect(1240, 300, 110, 80))
-        self.label_weather_tomorrow_3.setStyleSheet(color2)
         self.label_weather_tomorrow_3.setAlignment(QtCore.Qt.AlignCenter)
+        self.fons.append(self.label_weather_tomorrow_3)
+        self.ggvp.append(self.label_weather_tomorrow_3)
 
         self.label_weather_tomorrow_4 = QtWidgets.QLabel(self.centralwidget)
         self.label_weather_tomorrow_4.setGeometry(QtCore.QRect(1370, 300, 110, 80))
-        self.label_weather_tomorrow_4.setStyleSheet(color2)
         self.label_weather_tomorrow_4.setAlignment(QtCore.Qt.AlignCenter)
+        self.fons.append(self.label_weather_tomorrow_4)
+        self.ggvp.append(self.label_weather_tomorrow_4)
 
         self.label_weather_tomorrow_5 = QtWidgets.QLabel(self.centralwidget)
         self.label_weather_tomorrow_5.setGeometry(QtCore.QRect(1495, 300, 110, 80))
-        self.label_weather_tomorrow_5.setStyleSheet(color2)
         self.label_weather_tomorrow_5.setAlignment(QtCore.Qt.AlignCenter)
+        self.fons.append(self.label_weather_tomorrow_5)
+        self.ggvp.append(self.label_weather_tomorrow_5)
 
 ######## Ежедневные факторы ############################################################################################
 
         self.label_fakt = QtWidgets.QLabel(self.centralwidget)
         self.label_fakt.setGeometry(QtCore.QRect(300, 450, 440, 40))
         self.label_fakt.setText(" Факторы плохого самочувствия:")
+        self.ggvp.append(self.label_fakt)
 
         self.checkStress = QtWidgets.QCheckBox(self.centralwidget)
         self.checkStress.setGeometry(QtCore.QRect(320, 490, 420, 40))
         self.checkStress.setText("Стресс")
+        self.ggvp.append(self.checkStress)
 
         self.checkAlko = QtWidgets.QCheckBox(self.centralwidget)
         self.checkAlko.setGeometry(QtCore.QRect(320, 530, 420, 40))
         self.checkAlko.setText("Употребление алкоголя")
+        self.ggvp.append(self.checkAlko)
 
         self.label_kolvo_sna = QtWidgets.QLabel(self.centralwidget)
         self.label_kolvo_sna.setGeometry(QtCore.QRect(300, 570, 440, 40))
         self.label_kolvo_sna.setText("Количество сна:")
+        self.ggvp.append(self.label_kolvo_sna)
 
         self.horizontalSlider_son = QtWidgets.QSlider(self.centralwidget)
         self.horizontalSlider_son.setGeometry(QtCore.QRect(313, 610, 385, 20))
         self.horizontalSlider_son.setOrientation(QtCore.Qt.Horizontal)
+        self.ggvp.append(self.horizontalSlider_son)
 
         self.label_son = QtWidgets.QLabel(self.centralwidget)
         self.label_son.setGeometry(QtCore.QRect(315, 630, 420, 30))
         self.label_son.setText("0    1    2    3    4    5    6    7    8    9    10    11    12+")
+        self.ggvp.append(self.label_son)
 
 ######## Добавление стресса и боли #####################################################################################
 
         self.new_pain = QtWidgets.QPushButton(self.centralwidget)
         self.new_pain.setGeometry(QtCore.QRect(760, 450, 180, 100))
-        self.new_pain.setStyleSheet(color3)
         self.new_pain.setText("Добавить\nплохое\nсамочувствие")
         self.new_pain.clicked.connect(self.addPein)
+        self.btns.append(self.new_pain)
+        self.ggvp.append(self.new_pain)
 
         self.new_stress = QtWidgets.QPushButton(self.centralwidget)
         self.new_stress.setGeometry(QtCore.QRect(760, 570, 180, 100))
-        self.new_stress.setStyleSheet(color3)
         self.new_stress.setText("Добавить\nзапланированный\nстресс")
-
-########################################################################################################################
-
-        self.zametki = QtWidgets.QPlainTextEdit(self.centralwidget)
-        self.zametki.setGeometry(QtCore.QRect(970, 450, 910, 530))
+        self.btns.append(self.new_stress)
+        self.ggvp.append(self.new_stress)
 
 ######## Страница советов ##############################################################################################
 
         self.fonSoveta1 = QtWidgets.QLabel(self.centralwidget)
-        self.fonSoveta1.hide()
         self.fonSoveta1.setGeometry(QtCore.QRect(300, 23, 640, 400))
-        self.fonSoveta1.setStyleSheet(color2)
+        self.fons.append(self.fonSoveta1)
+        self.winSovet.append(self.fonSoveta1)
 
         self.fonSoveta2 = QtWidgets.QLabel(self.centralwidget)
-        self.fonSoveta2.hide()
         self.fonSoveta2.setGeometry(QtCore.QRect(970, 23, 640, 400))
-        self.fonSoveta2.setStyleSheet(color2)
+        self.fons.append(self.fonSoveta2)
+        self.winSovet.append(self.fonSoveta2)
 
         self.sovet_1 = QtWidgets.QLabel(self.centralwidget)
-        self.sovet_1.hide()
         self.sovet_1.setGeometry(QtCore.QRect(310, 33, 620, 380))
         self.sovet_1.setAlignment(QtCore.Qt.AlignCenter)
         self.sovet_1.setText("Когда-то тут будут советы для хорошего самочувствия")
-        self.sovet_1.setStyleSheet(color2)
+        self.fons.append(self.sovet_1)
+        self.winSovet.append(self.sovet_1)
 
         self.sovet_2 = QtWidgets.QLabel(self.centralwidget)
-        self.sovet_2.hide()
         self.sovet_2.setGeometry(QtCore.QRect(980, 33, 620, 380))
         self.sovet_2.setAlignment(QtCore.Qt.AlignCenter)
         self.sovet_2.setText("Когда-то тут будут советы для хорошего самочувствия")
-        self.sovet_2.setStyleSheet(color2)
+        self.fons.append(self.sovet_2)
+        self.winSovet.append(self.sovet_2)
+
+######## Страница входа в аккаунт ######################################################################################
+
+        self.label_login = QtWidgets.QLabel(self.centralwidget)
+        self.label_login.setGeometry(QtCore.QRect(820, 325, 180, 40))
+        self.label_login.setText("Логин:")
+        self.winAkkIN.append(self.label_login)
+
+        self.login = QtWidgets.QLineEdit(self.centralwidget)
+        self.login.setGeometry(QtCore.QRect(800, 360, 450, 40))
+        self.fons.append(self.login)
+        self.winAkkIN.append(self.login)
+
+        self.label_pass = QtWidgets.QLabel(self.centralwidget)
+        self.label_pass.setGeometry(QtCore.QRect(820, 400, 180, 40))
+        self.label_pass.setText("Пароль:")
+        self.winAkkIN.append(self.label_pass)
+
+        self.password = QtWidgets.QLineEdit(self.centralwidget)
+        self.password.setGeometry(QtCore.QRect(800, 435, 450, 40))
+        self.fons.append(self.password)
+        self.winAkkIN.append(self.password)
+
+        self.loginIn = QtWidgets.QPushButton(self.centralwidget)
+        self.loginIn.setGeometry(QtCore.QRect(1050, 500, 200, 45))
+        self.loginIn.setText("Войти")
+        self.loginIn.clicked.connect(self.logon)
+        self.btns.append(self.loginIn)
+        self.winAkkIN.append(self.loginIn)
+
+        self.new_akk = QtWidgets.QPushButton(self.centralwidget)
+        self.new_akk.setGeometry(QtCore.QRect(800, 500, 200, 45))
+        self.new_akk.setText("Создать новый аккаунт")
+        self.new_akk.clicked.connect(self.createNewAkkount)
+        self.btns.append(self.new_akk)
+        self.winAkkIN.append(self.new_akk)
 
 ######## Страница аккаунта #############################################################################################
 
+        self.exit = QtWidgets.QPushButton(self.centralwidget)
+        self.exit.setGeometry(QtCore.QRect(24, 850, 180, 45))
+        self.exit.setText("Выйти из акаунта")
+        self.exit.clicked.connect(self.exitWindow)
+        self.btns.append(self.exit)
+        self.winAkk.append(self.exit)
+
+######## Страница создания аккаунта ####################################################################################
+
+        self.create_label_akk = QtWidgets.QLabel(self.centralwidget)
+        self.create_label_akk.setGeometry(QtCore.QRect(400, 23, 450, 40))
+        self.create_label_akk.setText("Создание аккаунта")
+        self.winAkkCreate.append(self.create_label_akk)
+
+        self.create_label_name = QtWidgets.QLabel(self.centralwidget)
+        self.create_label_name.setGeometry(QtCore.QRect(320, 100, 200, 40))
+        self.create_label_name.setText("Имя:")
+        self.winAkkCreate.append(self.create_label_name)
+
+        self.create_name = QtWidgets.QPlainTextEdit(self.centralwidget)
+        self.create_name.setGeometry(QtCore.QRect(540, 100, 450, 40))
+        self.fons.append(self.create_name)
+        self.winAkkCreate.append(self.create_name)
+
+        self.create_label_login = QtWidgets.QLabel(self.centralwidget)
+        self.create_label_login.setGeometry(QtCore.QRect(320, 160, 180, 40))
+        self.create_label_login.setText("Логин:")
+        self.winAkkCreate.append(self.create_label_login)
+
+        self.create_login = QtWidgets.QPlainTextEdit(self.centralwidget)
+        self.create_login.setGeometry(QtCore.QRect(540, 160, 450, 40))
+        self.fons.append(self.create_login)
+        self.winAkkCreate.append(self.create_login)
+
+        self.create_label_passs = QtWidgets.QLabel(self.centralwidget)
+        self.create_label_passs.setGeometry(QtCore.QRect(320, 220, 180, 40))
+        self.create_label_passs.setText("Пароль:")
+        self.winAkkCreate.append(self.create_label_passs)
+
+        self.create_passs = QtWidgets.QPlainTextEdit(self.centralwidget)
+        self.create_passs.setGeometry(QtCore.QRect(540, 220, 450, 40))
+        self.fons.append(self.create_passs)
+        self.winAkkCreate.append(self.create_passs)
+
+        self.create_label_pol = QtWidgets.QLabel(self.centralwidget)
+        self.create_label_pol.setGeometry(QtCore.QRect(320, 280, 180, 40))
+        self.create_label_pol.setText("Пол:")
+        self.winAkkCreate.append(self.create_label_pol)
+
+        self.horizontalLayoutWidget_3 = QtWidgets.QWidget(self.centralwidget)
+        self.horizontalLayoutWidget_3.setGeometry(QtCore.QRect(550, 280, 440, 40))
+        self.winAkkCreate.append(self.horizontalLayoutWidget_3)
+        self.horizontalLayout_pol = QtWidgets.QHBoxLayout(self.horizontalLayoutWidget_3)
+        self.horizontalLayout_pol.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_pol.setSpacing(0)
+
+        self.pol_jen = QtWidgets.QRadioButton(self.horizontalLayoutWidget_3)
+        self.horizontalLayout_pol.addWidget(self.pol_jen)
+        self.pol_jen.setText("Женский")
+        self.winAkkCreate.append(self.pol_jen)
+
+        self.pol_men = QtWidgets.QRadioButton(self.horizontalLayoutWidget_3)
+        self.horizontalLayout_pol.addWidget(self.pol_men)
+        self.pol_men.setText("Мужской")
+        self.winAkkCreate.append(self.pol_men)
+
+        self.create_label_data = QtWidgets.QLabel(self.centralwidget)
+        self.create_label_data.setGeometry(QtCore.QRect(320, 340, 180, 40))
+        self.create_label_data.setText("Дата рождения:")
+        self.winAkkCreate.append(self.create_label_data)
+
+        self.create_data = QtWidgets.QDateEdit(self.centralwidget)
+        self.create_data.setGeometry(QtCore.QRect(540, 340, 450, 40))
+        self.create_data.setMaximumDate(QtCore.QDate(2023, 1, 1))
+        self.create_data.setMinimumDate(QtCore.QDate(1907, 3, 4))
+        self.fons.append(self.create_data)
+        self.winAkkCreate.append(self.create_data)
+
+        self.create_label_pol = QtWidgets.QLabel(self.centralwidget)
+        self.create_label_pol.setGeometry(QtCore.QRect(320, 400, 180, 40))
+        self.create_label_pol.setText("Образ жизни:")
+        self.winAkkCreate.append(self.create_label_pol)
+
+        self.horizontalLayoutWidget_4 = QtWidgets.QWidget(self.centralwidget)
+        self.horizontalLayoutWidget_4.setGeometry(QtCore.QRect(550, 400, 440, 40))
+        self.winAkkCreate.append(self.horizontalLayoutWidget_4)
+        self.horizontalLayout_obraz = QtWidgets.QHBoxLayout(self.horizontalLayoutWidget_4)
+        self.horizontalLayout_obraz.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_obraz.setSpacing(0)
+
+        self.aktivnoct_1 = QtWidgets.QRadioButton(self.horizontalLayoutWidget_3)
+        self.horizontalLayout_obraz.addWidget(self.aktivnoct_1)
+        self.aktivnoct_1.setText("Сидячий")
+        self.winAkkCreate.append(self.aktivnoct_1)
+
+        self.aktivnoct_2 = QtWidgets.QRadioButton(self.horizontalLayoutWidget_3)
+        self.horizontalLayout_obraz.addWidget(self.aktivnoct_2)
+        self.aktivnoct_2.setText("Умеренный")
+        self.winAkkCreate.append(self.aktivnoct_2)
+
+        self.aktivnoct_3 = QtWidgets.QRadioButton(self.horizontalLayoutWidget_3)
+        self.horizontalLayout_obraz.addWidget(self.aktivnoct_3)
+        self.aktivnoct_3.setText("Активный")
+        self.winAkkCreate.append(self.aktivnoct_3)
+
+        self.create_label_privichki = QtWidgets.QLabel(self.centralwidget)
+        self.create_label_privichki.setGeometry(QtCore.QRect(320, 460, 180, 40))
+        self.create_label_privichki.setText("Вредные привычки:")
+        self.winAkkCreate.append(self.create_label_privichki)
+
+        self.create_kurenie = QtWidgets.QCheckBox(self.centralwidget)
+        self.create_kurenie.setGeometry(QtCore.QRect(550, 460, 450, 40))
+        self.create_kurenie.setText("Курение")
+        self.winAkkCreate.append(self.create_kurenie)
+
+        self.create_alkogol = QtWidgets.QCheckBox(self.centralwidget)
+        self.create_alkogol.setGeometry(QtCore.QRect(550, 500, 450, 40))
+        self.create_alkogol.setText("Алкоголь")
+        self.winAkkCreate.append(self.create_alkogol)
+
+        self.create_narko = QtWidgets.QCheckBox(self.centralwidget)
+        self.create_narko.setGeometry(QtCore.QRect(550, 540, 450, 40))
+        self.create_narko.setText("Что-то похуже)")
+        self.winAkkCreate.append(self.create_narko)
+
+        self.create_label_photo = QtWidgets.QLabel(self.centralwidget)
+        self.create_label_photo.setGeometry(QtCore.QRect(320, 600, 180, 40))
+        self.create_label_photo.setText("Фото профиля:")
+        self.winAkkCreate.append(self.create_label_photo)
+
+        self.create_new_akk = QtWidgets.QPushButton(self.centralwidget)
+        self.create_new_akk.setGeometry(QtCore.QRect(790, 620, 200, 45))
+        self.create_new_akk.setText("Создать новый аккаунт")
+        self.create_new_akk.clicked.connect(self.createNewAkkountsdannimi)
+        self.btns.append(self.create_new_akk)
+        self.winAkkCreate.append(self.create_new_akk)
+
 ######## Страница настроек #############################################################################################
 
-######## Меню добавления стресса #######################################################################################
+        self.label_ask_color = QtWidgets.QLabel(self.centralwidget)
+        self.label_ask_color.setGeometry(QtCore.QRect(300, 23, 180, 45))
+        self.label_ask_color.setText("Цвета программы:")
+        self.winSetting.append(self.label_ask_color)
+
+        self.col1 = QtWidgets.QPushButton(self.centralwidget)
+        self.col1.setGeometry(QtCore.QRect(300, 70, 180, 45))
+        self.col1.setText("Цвета 1")
+        self.col1.clicked.connect(self.BtnChanseColor1)
+        self.col1.setStyleSheet("background-color: rgb(173, 175, 219);\nborder: none;")  # база
+        self.winSetting.append(self.col1)
+
+        self.col2 = QtWidgets.QPushButton(self.centralwidget)
+        self.col2.setGeometry(QtCore.QRect(300, 130, 180, 45))
+        self.col2.setText("Цвета 2")
+        self.col2.clicked.connect(self.BtnChanseColor2)
+        self.col2.setStyleSheet("background-color: rgb(148, 125, 115);\nborder: none;")  # кофе
+        self.winSetting.append(self.col2)
+
+        self.col3 = QtWidgets.QPushButton(self.centralwidget)
+        self.col3.setGeometry(QtCore.QRect(300, 190, 180, 45))
+        self.col3.setText("Цвета 3")
+        self.col3.clicked.connect(self.BtnChanseColor3)
+        self.col3.setStyleSheet("background-color: rgb(226, 203, 219);\nborder: none;")  # база
+        self.winSetting.append(self.col3)
+
+######## Меню добавления плохого самочувствия ##########################################################################
 
         self.fonAddPein = QtWidgets.QLabel(self.centralwidget)
-        self.fonAddPein.hide()
-        self.fonAddPein.setGeometry(QtCore.QRect(970, 450, 910, 530))
-        self.fonAddPein.setStyleSheet(color2)
+        self.fonAddPein.setGeometry(QtCore.QRect(970, 23, 910, 950))
+        self.fons.append(self.fonAddPein)
+        self.winAddpein.append(self.fonAddPein)
+
+        self.label_ask_pein = QtWidgets.QLabel(self.centralwidget)
+        self.label_ask_pein.setGeometry(QtCore.QRect(1040, 43, 400, 40))
+        self.label_ask_pein.setText("Что вас беспокоит?")
+        self.fons.append(self.label_ask_pein)
+        self.winAddpein.append(self.label_ask_pein)
+
+        self.check_pein_1 = QtWidgets.QCheckBox(self.centralwidget)
+        self.check_pein_1.setGeometry(QtCore.QRect(1015, 83, 420, 40))
+        self.check_pein_1.setText("Усталость")
+        self.fons.append(self.check_pein_1)
+        self.winAddpein.append(self.check_pein_1)
+
+        self.check_pein_2 = QtWidgets.QCheckBox(self.centralwidget)
+        self.check_pein_2.setGeometry(QtCore.QRect(1015, 123, 420, 40))
+        self.check_pein_2.setText("Головная боль")
+        self.fons.append(self.check_pein_2)
+        self.winAddpein.append(self.check_pein_2)
+
+        self.check_pein_3 = QtWidgets.QCheckBox(self.centralwidget)
+        self.check_pein_3.setGeometry(QtCore.QRect(1015, 163, 420, 40))
+        self.check_pein_3.setText("Бессонница")
+        self.fons.append(self.check_pein_3)
+        self.winAddpein.append(self.check_pein_3)
+
+        self.check_pein_4 = QtWidgets.QCheckBox(self.centralwidget)
+        self.check_pein_4.setGeometry(QtCore.QRect(1015, 203, 420, 40))
+        self.check_pein_4.setText("Тошнота")
+        self.fons.append(self.check_pein_4)
+        self.winAddpein.append(self.check_pein_4)
+
+        self.check_pein_5 = QtWidgets.QCheckBox(self.centralwidget)
+        self.check_pein_5.setGeometry(QtCore.QRect(1015, 243, 420, 40))
+        self.check_pein_5.setText("Боль в животе")
+        self.fons.append(self.check_pein_5)
+        self.winAddpein.append(self.check_pein_5)
+
+        self.check_pein_6 = QtWidgets.QCheckBox(self.centralwidget)
+        self.check_pein_6.setGeometry(QtCore.QRect(1015, 283, 420, 40))
+        self.check_pein_6.setText("Болезнь или травма")
+        self.fons.append(self.check_pein_6)
+        self.winAddpein.append(self.check_pein_6)
 
         self.add_new_pein = QtWidgets.QPushButton(self.centralwidget)
-        self.add_new_pein.hide()
-        self.add_new_pein.setGeometry(QtCore.QRect(1650, 900, 180, 60))
-        self.add_new_pein.setStyleSheet(color3)
+        self.add_new_pein.setGeometry(QtCore.QRect(1650, 870, 180, 60))
         self.add_new_pein.setText("Добавить")
+        self.add_new_pein.clicked.connect(self.addaddPein)
+        self.btns.append(self.add_new_pein)
+        self.winAddpein.append(self.add_new_pein)
 
 ########################################################################################################################
 
         self.mySetFont()
         self.weather()
+        self.setcolors(self.color1, self.color2, self.color3, self.color4)
+        self.base.setStyleSheet("border: none;")
+        self.setting.setStyleSheet("background-color:" + self.color3)
+        self.hideSovets()
+        self.hideProfile()
+        self.hideSetting()
+        for i in self.winAddpein:
+            i.hide()
+
+    def setcolors(self, color_1, color_2, color_3, color_4):
+        self.color1 = color_1
+        self.color2 = color_2
+        self.color3 = color_3
+        self.color4 = color_4
+
+        for i in self.fons:
+            i.setStyleSheet("background-color:" + color_2)
+        for i in self.btns:
+            i.setStyleSheet("background-color:" + color_3)
+
+        self.setting.setStyleSheet("border: none;")
+        self.calendar.setStyleSheet("background-color:" + color_2 + "\ngridline-color:" + color_1)
+        self.setStyleSheet("background-color:" + color_1)
+        self.fon_menu.setStyleSheet(color_4)
+
+        with open('files/color.txt', 'w') as f:
+            f.write(color_1 + color_2 + color_3 + color_4)
+
+    def BtnChanseColor1(self):
+        self.setcolors("rgb(238, 212, 189);\n", "rgb(219, 173, 175);\n", "rgb(173, 175, 219); border: none;\n",
+                       "background-color: rgb(205, 185, 172);")
+
+    def BtnChanseColor2(self):
+        self.setcolors("rgb(233, 213, 202);\n", "rgb(193, 164, 149);\n", "rgb(148, 125, 115); border: none;\n",
+                       "background-color: rgb(116, 97, 89);")
+
+    def BtnChanseColor3(self):
+        self.setcolors("rgb(232, 226, 240);\n", "rgb(211, 209, 228);\n", "rgb(226, 203, 219); border: none;\n",
+                       "background-color: rgb(171, 171, 203);")
 
     def addPein(self):
         self.new_pain.hide()
-        self.fonAddPein.show()
-        self.add_new_pein.show()
+        for i in self.winAddpein:
+            i.show()
 
-
+    def addaddPein(self):
+        for i in self.winAddpein:
+            i.hide()
+        self.new_pain.show()
 
     def logon(self):
-        self.loginIn.hide()
+        for i in self.winAkkIN:
+            i.hide()
         self.exit.show()
+
+    def createNewAkkountsdannimi(self):
+        log = self.create_login.toPlainText()
+        if log.isalnum():
+            with open('files/profils/' + log + '.txt', 'w') as f:
+                f.write(self.create_passs.toPlainText() + '\n')
+                f.write(self.create_name.toPlainText() + '\n')
+                if self.pol_jen.isChecked():
+                    f.write("жен" + '\n')
+                else:
+                    f.write("муж" + '\n')
+                f.write(format(self.create_data.dateTime().toString('dd-MM-yyyy')) + '\n')
+                if self.aktivnoct_1.isChecked():
+                    f.write("Сидячий" + '\n')
+                else:
+                    if self.aktivnoct_2.isChecked():
+                        f.write("Умеренный" + '\n')
+                    else:
+                        f.write("Активный" + '\n')
+                if self.create_kurenie.isChecked():
+                    f.write("Курение" + '\n')
+                if self.create_alkogol.isChecked():
+                    f.write("Алкоголь" + '\n')
+                if self.create_narko.isChecked():
+                    f.write("Что-то похуже)" + '\n')
+
+                for i in self.winAkkCreate:
+                    i.hide()
+        # self.create_label_photo = QtWidgets.QLabel(self.centralwidget)
+
+    def createNewAkkount(self):
+        for i in self.winAkkIN:
+            i.hide()
+        for i in self.winAkkCreate:
+            i.show()
 
     def baseWindow(self):
         self.base.setStyleSheet("border: none;")
         self.base.setGeometry(QtCore.QRect(40, 370, 211, 45))
 
-        color = "background-color: rgb(173, 175, 219);\nborder: none;"
-        self.sovets.setStyleSheet(color)
+        self.sovets.setStyleSheet("background-color:" + self.color3)
         self.sovets.setGeometry(QtCore.QRect(25, 430, 180, 45))
-        self.profile.setStyleSheet(color)
+        self.profile.setStyleSheet("background-color:" + self.color3)
         self.profile.setGeometry(QtCore.QRect(25, 490, 180, 45))
-        self.setting.setStyleSheet(color)
+        self.setting.setStyleSheet("background-color:" + self.color3)
         self.setting.setGeometry(QtCore.QRect(25, 550, 180, 45))
 
         self.hideSovets()
         self.hideProfile()
         self.hideSetting()
 
-        self.calendar.show()
-        self.fon.show()
-        self.line.show()
-        self.line_3.show()
-        self.line_4.show()
-        self.line_5.show()
-        self.line_6.show()
-        self.line_2.show()
-        self.label_now.show()
-        self.label_weather_now.show()
-        self.label_todey.show()
-        self.horizontalLayoutWidget.show()
-        self.label_today_00.show()
-        self.label_today_03.show()
-        self.label_today_06.show()
-        self.label_today_09.show()
-        self.horizontalLayoutWidget_2.show()
-        self.label_today_12.show()
-        self.label_today_15.show()
-        self.label_today_18.show()
-        self.label_today_21.show()
-        self.label_tomorrow.show()
-        self.label_tomorrow_2.show()
-        self.label_tomorrow_3.show()
-        self.label_tomorrow_4.show()
-        self.label_tomorrow_5.show()
-        self.label_weather_tomorrow.show()
-        self.label_weather_tomorrow_2.show()
-        self.label_weather_tomorrow_3.show()
-        self.label_weather_tomorrow_4.show()
-        self.label_weather_tomorrow_5.show()
-        self.label_fakt.show()
-        self.checkStress.show()
-        self.checkAlko.show()
-        self.label_kolvo_sna.show()
-        self.horizontalSlider_son.show()
-        self.label_son.show()
-        self.new_pain.show()
-        self.new_stress.show()
-        self.zametki.show()
+        for i in self.ggvp:
+            i.show()
 
     def sovetsWindow(self):
         self.sovets.setStyleSheet("border: none;")
         self.sovets.setGeometry(QtCore.QRect(40, 430, 211, 45))
 
-        color = "background-color: rgb(173, 175, 219);\nborder: none;"
-        self.base.setStyleSheet(color)
+        self.base.setStyleSheet("background-color:" + self.color3)
         self.base.setGeometry(QtCore.QRect(25, 370, 180, 45))
-        self.profile.setStyleSheet(color)
+        self.profile.setStyleSheet("background-color:" + self.color3)
         self.profile.setGeometry(QtCore.QRect(25, 490, 180, 45))
-        self.setting.setStyleSheet(color)
+        self.setting.setStyleSheet("background-color:" + self.color3)
         self.setting.setGeometry(QtCore.QRect(25, 550, 180, 45))
 
         self.hideBase()
         self.hideProfile()
         self.hideSetting()
 
-        self.fonSoveta1.show()
-        self.fonSoveta2.show()
-        self.sovet_1.show()
-        self.sovet_2.show()
+        for i in self.winSovet:
+            i.show()
 
     def profileWindow(self):
         self.profile.setStyleSheet("border: none;")
         self.profile.setGeometry(QtCore.QRect(40, 490, 211, 45))
 
-        color = "background-color: rgb(173, 175, 219);\nborder: none;"
-        self.base.setStyleSheet(color)
+        self.base.setStyleSheet("background-color:" + self.color3)
         self.base.setGeometry(QtCore.QRect(25, 370, 180, 45))
-        self.sovets.setStyleSheet(color)
+        self.sovets.setStyleSheet("background-color:" + self.color3)
         self.sovets.setGeometry(QtCore.QRect(25, 430, 180, 45))
-        self.setting.setStyleSheet(color)
+        self.setting.setStyleSheet("background-color:" + self.color3)
         self.setting.setGeometry(QtCore.QRect(25, 550, 180, 45))
 
         self.hideBase()
         self.hideSovets()
         self.hideSetting()
 
+        for i in self.winAkk:
+            i.show()
+        for i in self.winAkkIN:
+            i.show()
+
     def settingWindow(self):
         self.setting.setStyleSheet("border: none;")
         self.setting.setGeometry(QtCore.QRect(40, 550, 211, 45))
 
-        color = "background-color: rgb(173, 175, 219);\nborder: none;"
-        self.base.setStyleSheet(color)
+        self.base.setStyleSheet("background-color:" + self.color3)
         self.base.setGeometry(QtCore.QRect(25, 370, 180, 45))
-        self.sovets.setStyleSheet(color)
+        self.sovets.setStyleSheet("background-color:" + self.color3)
         self.sovets.setGeometry(QtCore.QRect(25, 430, 180, 45))
-        self.profile.setStyleSheet(color)
+        self.profile.setStyleSheet("background-color:" + self.color3)
         self.profile.setGeometry(QtCore.QRect(25, 490, 180, 45))
 
         self.hideBase()
         self.hideSovets()
         self.hideProfile()
 
+        for i in self.winSetting:
+            i.show()
+
     def exitWindow(self):
         self.loginIn.show()
 
     def hideBase(self):
-        self.calendar.hide()
-        self.fon.hide()
-        self.line.hide()
-        self.line_3.hide()
-        self.line_4.hide()
-        self.line_5.hide()
-        self.line_6.hide()
-        self.line_2.hide()
-        self.label_now.hide()
-        self.label_weather_now.hide()
-        self.label_todey.hide()
-        self.horizontalLayoutWidget.hide()
-        self.label_today_00.hide()
-        self.label_today_03.hide()
-        self.label_today_06.hide()
-        self.label_today_09.hide()
-        self.horizontalLayoutWidget_2.hide()
-        self.label_today_12.hide()
-        self.label_today_15.hide()
-        self.label_today_18.hide()
-        self.label_today_21.hide()
-        self.label_tomorrow.hide()
-        self.label_tomorrow_2.hide()
-        self.label_tomorrow_3.hide()
-        self.label_tomorrow_4.hide()
-        self.label_tomorrow_5.hide()
-        self.label_weather_tomorrow.hide()
-        self.label_weather_tomorrow_2.hide()
-        self.label_weather_tomorrow_3.hide()
-        self.label_weather_tomorrow_4.hide()
-        self.label_weather_tomorrow_5.hide()
-        self.label_fakt.hide()
-        self.checkStress.hide()
-        self.checkAlko.hide()
-        self.label_kolvo_sna.hide()
-        self.horizontalSlider_son.hide()
-        self.label_son.hide()
-        self.new_pain.hide()
-        self.new_stress.hide()
-        self.zametki.hide()
+        for i in self.ggvp:
+            i.hide()
 
     def hideSovets(self):
-        self.fonSoveta1.hide()
-        self.fonSoveta2.hide()
-        self.sovet_1.hide()
-        self.sovet_2.hide()
+        for i in self.winSovet:
+            i.hide()
 
     def hideProfile(self):
-        self.fonSoveta1.hide()
+        for i in self.winAkk:
+            i.hide()
+        for i in self.winAkkIN:
+            i.hide()
+        for i in self.winAkkCreate:
+            i.hide()
 
     def hideSetting(self):
-        self.fonSoveta1.hide()
-
+        for i in self.winSetting:
+            i.hide()
 
     def mySetFont(self):
         font = QtGui.QFont()
         font.setFamily("Segoe UI")
         font.setPointSize(10)
 
+        for i in self.ggvp:
+            i.setFont(font)
+        for i in self.leftMenu:
+            i.setFont(font)
+        for i in self.winAddpein:
+            i.setFont(font)
+        for i in self.winAkkIN:
+            i.setFont(font)
+        for i in self.winAkk:
+            i.setFont(font)
+        for i in self.winAkkCreate:
+            i.setFont(font)
+        for i in self.winSovet:
+            i.setFont(font)
+        for i in self.winSetting:
+            i.setFont(font)
+
         self.setFont(font)
-        self.calendar.setFont(font)
-        self.loginIn.setFont(font)
-        self.exit.setFont(font)
-        self.profile.setFont(font)
-        self.base.setFont(font)
-        self.setting.setFont(font)
-        self.sovets.setFont(font)
-        self.label_todey.setFont(font)
-        self.label_now.setFont(font)
         self.label_weather_now.setFont(QtGui.QFont("Segoe UI", 15))
-        self.label_tomorrow.setFont(font)
-        self.label_tomorrow_2.setFont(font)
-        self.label_tomorrow_3.setFont(font)
-        self.label_tomorrow_4.setFont(font)
-        self.label_tomorrow_5.setFont(font)
-        self.label_weather_tomorrow.setFont(font)
-        self.label_weather_tomorrow_2.setFont(font)
-        self.label_weather_tomorrow_3.setFont(font)
-        self.label_weather_tomorrow_4.setFont(font)
-        self.label_weather_tomorrow_5.setFont(font)
-        self.label_today_00.setFont(font)
-        self.label_today_03.setFont(font)
-        self.label_today_06.setFont(font)
-        self.label_today_09.setFont(font)
-        self.label_today_12.setFont(font)
-        self.label_today_15.setFont(font)
-        self.label_today_18.setFont(font)
-        self.label_today_21.setFont(font)
-        self.new_pain.setFont(font)
-        self.new_stress.setFont(font)
-        self.label_fakt.setFont(font)
-        self.checkStress.setFont(font)
-        self.checkAlko.setFont(font)
-        self.label_kolvo_sna.setFont(font)
-        self.label_son.setFont(font)
-
-        self.sovet_1.setFont(font)
-        self.sovet_2.setFont(font)
-
-        self.add_new_pein.setFont(font)
+        self.create_label_akk.setFont(QtGui.QFont("Segoe UI", 15))
 
     def weather(self):
         segodna = 0
@@ -614,7 +884,6 @@ class Window(QMainWindow):
         except Exception as e:
             print("Exception (weather):", e)
             pass
-
 
         self.label_weather_now.setText(weather_now1)
 
