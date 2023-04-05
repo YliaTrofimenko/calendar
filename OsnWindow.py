@@ -9,13 +9,15 @@ class Window(QMainWindow):
         self.setWindowTitle("Трекер плохого самочувствия")
         self.resize(1910, 1080)
         self.setWindowIcon(QtGui.QIcon('photo/icon.png'))
-
         self.centralwidget = QtWidgets.QWidget(self)
         self.setCentralWidget(self.centralwidget)
 
+    # Списки для форматирования
         self.btns = []
         self.fons = []
         self.ggvp = []
+
+    # Списки раазных окон
         self.winAddpein = []
         self.leftMenu = []
         self.winAkkIN = []
@@ -29,6 +31,16 @@ class Window(QMainWindow):
             self.color2 = f.readline()
             self.color3 = f.readline()
             self.color4 = f.readline()
+
+        with open('files/akk.txt', 'r') as f:
+            m = f.readline()
+            if m == '1\n':
+                self.nalichieakkaunta = True
+                self.log = f.readline().rstrip()
+                self.pas = f.readline().rstrip()
+            else:
+                self.nalichieakkaunta = False
+
 ######## Меню ##########################################################################################################
 
         self.fon_menu = QtWidgets.QLabel(self.centralwidget)
@@ -262,38 +274,6 @@ class Window(QMainWindow):
         self.fons.append(self.label_weather_tomorrow_5)
         self.ggvp.append(self.label_weather_tomorrow_5)
 
-######## Ежедневные факторы ############################################################################################
-
-        self.label_fakt = QtWidgets.QLabel(self.centralwidget)
-        self.label_fakt.setGeometry(QtCore.QRect(300, 450, 440, 40))
-        self.label_fakt.setText(" Факторы плохого самочувствия:")
-        self.ggvp.append(self.label_fakt)
-
-        self.checkStress = QtWidgets.QCheckBox(self.centralwidget)
-        self.checkStress.setGeometry(QtCore.QRect(320, 490, 420, 40))
-        self.checkStress.setText("Стресс")
-        self.ggvp.append(self.checkStress)
-
-        self.checkAlko = QtWidgets.QCheckBox(self.centralwidget)
-        self.checkAlko.setGeometry(QtCore.QRect(320, 530, 420, 40))
-        self.checkAlko.setText("Употребление алкоголя")
-        self.ggvp.append(self.checkAlko)
-
-        self.label_kolvo_sna = QtWidgets.QLabel(self.centralwidget)
-        self.label_kolvo_sna.setGeometry(QtCore.QRect(300, 570, 440, 40))
-        self.label_kolvo_sna.setText("Количество сна:")
-        self.ggvp.append(self.label_kolvo_sna)
-
-        self.horizontalSlider_son = QtWidgets.QSlider(self.centralwidget)
-        self.horizontalSlider_son.setGeometry(QtCore.QRect(313, 610, 385, 20))
-        self.horizontalSlider_son.setOrientation(QtCore.Qt.Horizontal)
-        self.ggvp.append(self.horizontalSlider_son)
-
-        self.label_son = QtWidgets.QLabel(self.centralwidget)
-        self.label_son.setGeometry(QtCore.QRect(315, 630, 420, 30))
-        self.label_son.setText("0    1    2    3    4    5    6    7    8    9    10    11    12+")
-        self.ggvp.append(self.label_son)
-
 ######## Добавление стресса и боли #####################################################################################
 
         self.new_pain = QtWidgets.QPushButton(self.centralwidget)
@@ -304,34 +284,24 @@ class Window(QMainWindow):
         self.ggvp.append(self.new_pain)
 
         self.new_stress = QtWidgets.QPushButton(self.centralwidget)
-        self.new_stress.setGeometry(QtCore.QRect(760, 570, 180, 100))
+        self.new_stress.setGeometry(QtCore.QRect(300, 450, 180, 100))
         self.new_stress.setText("Добавить\nзапланированный\nстресс")
         self.btns.append(self.new_stress)
         self.ggvp.append(self.new_stress)
 
 ######## Страница советов ##############################################################################################
 
-        self.fonSoveta1 = QtWidgets.QLabel(self.centralwidget)
-        self.fonSoveta1.setGeometry(QtCore.QRect(300, 23, 640, 400))
-        self.fons.append(self.fonSoveta1)
-        self.winSovet.append(self.fonSoveta1)
-
-        self.fonSoveta2 = QtWidgets.QLabel(self.centralwidget)
-        self.fonSoveta2.setGeometry(QtCore.QRect(970, 23, 640, 400))
-        self.fons.append(self.fonSoveta2)
-        self.winSovet.append(self.fonSoveta2)
-
         self.sovet_1 = QtWidgets.QLabel(self.centralwidget)
-        self.sovet_1.setGeometry(QtCore.QRect(310, 33, 620, 380))
+        self.sovet_1.setGeometry(QtCore.QRect(300, 23, 640, 400))
         self.sovet_1.setAlignment(QtCore.Qt.AlignCenter)
-        self.sovet_1.setText("Когда-то тут будут советы для хорошего самочувствия")
+        self.sovet_1.setText("PEITE PIVO CHASHE(V LENTE BUD LIGHT\n PO SKIDKE 30 RUB ZA BANKY)")
         self.fons.append(self.sovet_1)
         self.winSovet.append(self.sovet_1)
 
         self.sovet_2 = QtWidgets.QLabel(self.centralwidget)
-        self.sovet_2.setGeometry(QtCore.QRect(980, 33, 620, 380))
+        self.sovet_2.setGeometry(QtCore.QRect(970, 23, 640, 400))
         self.sovet_2.setAlignment(QtCore.Qt.AlignCenter)
-        self.sovet_2.setText("Когда-то тут будут советы для хорошего самочувствия")
+        self.sovet_2.setText("PO ZAKONU архимеда после сытного обеда\nчтобы жиром не заплыть надо сижку покурить")
         self.fons.append(self.sovet_2)
         self.winSovet.append(self.sovet_2)
 
@@ -358,25 +328,92 @@ class Window(QMainWindow):
         self.winAkkIN.append(self.password)
 
         self.loginIn = QtWidgets.QPushButton(self.centralwidget)
-        self.loginIn.setGeometry(QtCore.QRect(1050, 500, 200, 45))
+        self.loginIn.setGeometry(QtCore.QRect(1050, 530, 200, 45))
         self.loginIn.setText("Войти")
         self.loginIn.clicked.connect(self.logon)
         self.btns.append(self.loginIn)
         self.winAkkIN.append(self.loginIn)
 
         self.new_akk = QtWidgets.QPushButton(self.centralwidget)
-        self.new_akk.setGeometry(QtCore.QRect(800, 500, 200, 45))
+        self.new_akk.setGeometry(QtCore.QRect(800, 530, 200, 45))
         self.new_akk.setText("Создать новый аккаунт")
-        self.new_akk.clicked.connect(self.createNewAkkount)
+        self.new_akk.clicked.connect(self.createNewAkkountWindow)
         self.btns.append(self.new_akk)
         self.winAkkIN.append(self.new_akk)
 
+        self.label_error1 = QtWidgets.QLabel(self.centralwidget)
+        self.label_error1.hide()
+        self.label_error1.setGeometry(QtCore.QRect(820, 480, 300, 40))
+        self.label_error1.setStyleSheet("color: rgb(255, 0, 0);")
+        self.label_error1.setText("* неверный пароль")
+
+        self.label_error2 = QtWidgets.QLabel(self.centralwidget)
+        self.label_error2.hide()
+        self.label_error2.setGeometry(QtCore.QRect(820, 480, 300, 40))
+        self.label_error2.setStyleSheet("color: rgb(255, 0, 0);")
+        self.label_error2.setText("* такого аккаунта не существует")
+
 ######## Страница аккаунта #############################################################################################
 
+        self.photo_in_akk = QtWidgets.QLabel(self.centralwidget)
+        self.photo_in_akk.setGeometry(QtCore.QRect(1500, 100, 250, 250))
+        self.fons.append(self.photo_in_akk)
+        self.winAkk.append(self.photo_in_akk)
+
+        self.nic_in_akk = QtWidgets.QLabel(self.centralwidget)
+        self.nic_in_akk.setGeometry(QtCore.QRect(1500, 360, 250, 40))
+        self.nic_in_akk.setAlignment(QtCore.Qt.AlignCenter)
+        self.winAkk.append(self.nic_in_akk)
+
+        self.label_name_in_akk = QtWidgets.QLabel(self.centralwidget)
+        self.label_name_in_akk.setGeometry(QtCore.QRect(320, 110, 180, 40))
+        self.label_name_in_akk.setText("Имя:")
+        self.winAkk.append(self.label_name_in_akk)
+
+        self.name_in_akk = QtWidgets.QLabel(self.centralwidget)
+        self.name_in_akk.setGeometry(QtCore.QRect(520, 110, 180, 40))
+        self.winAkk.append(self.name_in_akk)
+
+        self.label_pol_in_akk = QtWidgets.QLabel(self.centralwidget)
+        self.label_pol_in_akk.setGeometry(QtCore.QRect(320, 160, 180, 40))
+        self.label_pol_in_akk.setText("Пол:")
+        self.winAkk.append(self.label_pol_in_akk)
+
+        self.pol_in_akk = QtWidgets.QLabel(self.centralwidget)
+        self.pol_in_akk.setGeometry(QtCore.QRect(520, 160, 180, 40))
+        self.winAkk.append(self.pol_in_akk)
+
+        self.label_data = QtWidgets.QLabel(self.centralwidget)
+        self.label_data.setGeometry(QtCore.QRect(320, 210, 180, 40))
+        self.label_data.setText("Дата рождения:")
+        self.winAkk.append(self.label_data)
+
+        self.data_in_akk = QtWidgets.QLabel(self.centralwidget)
+        self.data_in_akk.setGeometry(QtCore.QRect(520, 210, 180, 40))
+        self.winAkk.append(self.data_in_akk)
+
+        self.label_obraz_zizni = QtWidgets.QLabel(self.centralwidget)
+        self.label_obraz_zizni.setGeometry(QtCore.QRect(320, 260, 180, 40))
+        self.label_obraz_zizni.setText("Образ жизни:")
+        self.winAkk.append(self.label_obraz_zizni)
+
+        self.obraz_zizni = QtWidgets.QLabel(self.centralwidget)
+        self.obraz_zizni.setGeometry(QtCore.QRect(520, 260, 180, 40))
+        self.winAkk.append(self.obraz_zizni)
+
+        self.label_vrednie_privichki = QtWidgets.QLabel(self.centralwidget)
+        self.label_vrednie_privichki.setGeometry(QtCore.QRect(320, 310, 180, 40))
+        self.label_vrednie_privichki.setText("Вредные привычки:")
+        self.winAkk.append(self.label_vrednie_privichki)
+
+        self.vrednie_privichki = QtWidgets.QLabel(self.centralwidget)
+        self.vrednie_privichki.setGeometry(QtCore.QRect(520, 310, 180, 40))
+        self.winAkk.append(self.vrednie_privichki)
+
         self.exit = QtWidgets.QPushButton(self.centralwidget)
-        self.exit.setGeometry(QtCore.QRect(24, 850, 180, 45))
+        self.exit.setGeometry(QtCore.QRect(1650, 870, 180, 60))
         self.exit.setText("Выйти из акаунта")
-        self.exit.clicked.connect(self.exitWindow)
+        self.exit.clicked.connect(self.exitAkk)
         self.btns.append(self.exit)
         self.winAkk.append(self.exit)
 
@@ -506,36 +543,36 @@ class Window(QMainWindow):
         self.create_new_akk = QtWidgets.QPushButton(self.centralwidget)
         self.create_new_akk.setGeometry(QtCore.QRect(790, 620, 200, 45))
         self.create_new_akk.setText("Создать новый аккаунт")
-        self.create_new_akk.clicked.connect(self.createNewAkkountsdannimi)
+        self.create_new_akk.clicked.connect(self.createNewAkkount)
         self.btns.append(self.create_new_akk)
         self.winAkkCreate.append(self.create_new_akk)
 
 ######## Страница настроек #############################################################################################
 
         self.label_ask_color = QtWidgets.QLabel(self.centralwidget)
-        self.label_ask_color.setGeometry(QtCore.QRect(300, 23, 180, 45))
+        self.label_ask_color.setGeometry(QtCore.QRect(350, 23, 180, 45))
         self.label_ask_color.setText("Цвета программы:")
         self.winSetting.append(self.label_ask_color)
 
         self.col1 = QtWidgets.QPushButton(self.centralwidget)
-        self.col1.setGeometry(QtCore.QRect(300, 70, 180, 45))
+        self.col1.setGeometry(QtCore.QRect(300, 100, 180, 45))
         self.col1.setText("Цвета 1")
         self.col1.clicked.connect(self.BtnChanseColor1)
         self.col1.setStyleSheet("background-color: rgb(173, 175, 219);\nborder: none;")  # база
         self.winSetting.append(self.col1)
 
         self.col2 = QtWidgets.QPushButton(self.centralwidget)
-        self.col2.setGeometry(QtCore.QRect(300, 130, 180, 45))
+        self.col2.setGeometry(QtCore.QRect(300, 180, 180, 45))
         self.col2.setText("Цвета 2")
         self.col2.clicked.connect(self.BtnChanseColor2)
         self.col2.setStyleSheet("background-color: rgb(148, 125, 115);\nborder: none;")  # кофе
         self.winSetting.append(self.col2)
 
         self.col3 = QtWidgets.QPushButton(self.centralwidget)
-        self.col3.setGeometry(QtCore.QRect(300, 190, 180, 45))
+        self.col3.setGeometry(QtCore.QRect(300, 260, 180, 45))
         self.col3.setText("Цвета 3")
         self.col3.clicked.connect(self.BtnChanseColor3)
-        self.col3.setStyleSheet("background-color: rgb(226, 203, 219);\nborder: none;")  # база
+        self.col3.setStyleSheet("background-color: rgb(226, 203, 219);\nborder: none;")  # лиловый
         self.winSetting.append(self.col3)
 
 ######## Меню добавления плохого самочувствия ##########################################################################
@@ -587,6 +624,35 @@ class Window(QMainWindow):
         self.fons.append(self.check_pein_6)
         self.winAddpein.append(self.check_pein_6)
 
+        self.checkStress = QtWidgets.QCheckBox(self.centralwidget)
+        self.checkStress.setGeometry(QtCore.QRect(320, 490, 420, 40))
+        self.checkStress.setText("Стресс")
+        self.fons.append(self.checkStress)
+        self.winAddpein.append(self.checkStress)
+
+        self.checkAlko = QtWidgets.QCheckBox(self.centralwidget)
+        self.checkAlko.setGeometry(QtCore.QRect(320, 530, 420, 40))
+        self.checkAlko.setText("Употребление алкоголя")
+        self.fons.append(self.checkAlko)
+        self.winAddpein.append(self.checkAlko)
+
+        self.label_kolvo_sna = QtWidgets.QLabel(self.centralwidget)
+        self.label_kolvo_sna.setGeometry(QtCore.QRect(300, 570, 440, 40))
+        self.label_kolvo_sna.setText("Количество сна:")
+        self.fons.append(self.label_kolvo_sna)
+        self.winAddpein.append(self.label_kolvo_sna)
+
+        self.horizontalSlider_son = QtWidgets.QSlider(self.centralwidget)
+        self.horizontalSlider_son.setGeometry(QtCore.QRect(313, 610, 385, 20))
+        self.horizontalSlider_son.setOrientation(QtCore.Qt.Horizontal)
+        self.winAddpein.append(self.horizontalSlider_son)
+
+        self.label_son = QtWidgets.QLabel(self.centralwidget)
+        self.label_son.setGeometry(QtCore.QRect(315, 630, 420, 30))
+        self.label_son.setText("0    1    2    3    4    5    6    7    8    9    10    11    12+")
+        self.fons.append(self.label_son)
+        self.winAddpein.append(self.label_son)
+
         self.add_new_pein = QtWidgets.QPushButton(self.centralwidget)
         self.add_new_pein.setGeometry(QtCore.QRect(1650, 870, 180, 60))
         self.add_new_pein.setText("Добавить")
@@ -596,47 +662,22 @@ class Window(QMainWindow):
 
 ########################################################################################################################
 
+    # Форматирование
         self.mySetFont()
+
+    # Запрос прогноза погоды
         self.weather()
+
+    # Установка цветов
         self.setcolors(self.color1, self.color2, self.color3, self.color4)
         self.base.setStyleSheet("border: none;")
         self.setting.setStyleSheet("background-color:" + self.color3)
+
+    # Скрытие ненужных окон
         self.hideSovets()
         self.hideProfile()
         self.hideSetting()
-        for i in self.winAddpein:
-            i.hide()
-
-    def setcolors(self, color_1, color_2, color_3, color_4):
-        self.color1 = color_1
-        self.color2 = color_2
-        self.color3 = color_3
-        self.color4 = color_4
-
-        for i in self.fons:
-            i.setStyleSheet("background-color:" + color_2)
-        for i in self.btns:
-            i.setStyleSheet("background-color:" + color_3)
-
-        self.setting.setStyleSheet("border: none;")
-        self.calendar.setStyleSheet("background-color:" + color_2 + "\ngridline-color:" + color_1)
-        self.setStyleSheet("background-color:" + color_1)
-        self.fon_menu.setStyleSheet(color_4)
-
-        with open('files/color.txt', 'w') as f:
-            f.write(color_1 + color_2 + color_3 + color_4)
-
-    def BtnChanseColor1(self):
-        self.setcolors("rgb(238, 212, 189);\n", "rgb(219, 173, 175);\n", "rgb(173, 175, 219); border: none;\n",
-                       "background-color: rgb(205, 185, 172);")
-
-    def BtnChanseColor2(self):
-        self.setcolors("rgb(233, 213, 202);\n", "rgb(193, 164, 149);\n", "rgb(148, 125, 115); border: none;\n",
-                       "background-color: rgb(116, 97, 89);")
-
-    def BtnChanseColor3(self):
-        self.setcolors("rgb(232, 226, 240);\n", "rgb(211, 209, 228);\n", "rgb(226, 203, 219); border: none;\n",
-                       "background-color: rgb(171, 171, 203);")
+        self.hideAddPein()
 
     def addPein(self):
         self.new_pain.hide()
@@ -648,45 +689,9 @@ class Window(QMainWindow):
             i.hide()
         self.new_pain.show()
 
-    def logon(self):
-        for i in self.winAkkIN:
+    def hideAddPein(self):
+        for i in self.winAddpein:
             i.hide()
-        self.exit.show()
-
-    def createNewAkkountsdannimi(self):
-        log = self.create_login.toPlainText()
-        if log.isalnum():
-            with open('files/profils/' + log + '.txt', 'w') as f:
-                f.write(self.create_passs.toPlainText() + '\n')
-                f.write(self.create_name.toPlainText() + '\n')
-                if self.pol_jen.isChecked():
-                    f.write("жен" + '\n')
-                else:
-                    f.write("муж" + '\n')
-                f.write(format(self.create_data.dateTime().toString('dd-MM-yyyy')) + '\n')
-                if self.aktivnoct_1.isChecked():
-                    f.write("Сидячий" + '\n')
-                else:
-                    if self.aktivnoct_2.isChecked():
-                        f.write("Умеренный" + '\n')
-                    else:
-                        f.write("Активный" + '\n')
-                if self.create_kurenie.isChecked():
-                    f.write("Курение" + '\n')
-                if self.create_alkogol.isChecked():
-                    f.write("Алкоголь" + '\n')
-                if self.create_narko.isChecked():
-                    f.write("Что-то похуже)" + '\n')
-
-                for i in self.winAkkCreate:
-                    i.hide()
-        # self.create_label_photo = QtWidgets.QLabel(self.centralwidget)
-
-    def createNewAkkount(self):
-        for i in self.winAkkIN:
-            i.hide()
-        for i in self.winAkkCreate:
-            i.show()
 
     def baseWindow(self):
         self.base.setStyleSheet("border: none;")
@@ -739,10 +744,11 @@ class Window(QMainWindow):
         self.hideSovets()
         self.hideSetting()
 
-        for i in self.winAkk:
-            i.show()
-        for i in self.winAkkIN:
-            i.show()
+        if self.nalichieakkaunta:
+            self.postroenieAkkaunta()
+        else:
+            for i in self.winAkkIN:
+                i.show()
 
     def settingWindow(self):
         self.setting.setStyleSheet("border: none;")
@@ -762,8 +768,101 @@ class Window(QMainWindow):
         for i in self.winSetting:
             i.show()
 
-    def exitWindow(self):
-        self.loginIn.show()
+    def postroenieAkkaunta(self):
+        with open('files/profils/' + self.log + '.txt', 'r') as f:
+            p = f.readline().rstrip()
+            if p == self.pas:
+                self.label_error1.hide()
+                for i in self.winAkk:
+                    i.show()
+                self.nic_in_akk.setText(self.log)
+                self.name_in_akk.setText(f.readline().rstrip())
+                self.pol_in_akk.setText(f.readline().rstrip())
+                self.data_in_akk.setText(f.readline().rstrip())
+                self.obraz_zizni.setText(f.readline().rstrip())
+                self.vrednie_privichki.setText(f.readline().rstrip())
+                self.nalichieakkaunta = True
+                with open('files/akk.txt', 'w') as f:
+                    f.write('1\n')
+                    f.write(self.log + '\n')
+                    f.write(self.pas + '\n')
+                for i in self.winAkkIN:
+                    i.hide()
+
+            else:
+                self.label_error1.show()
+
+    def logon(self):
+        with open('files/list_akk.txt', 'r') as f:
+            while True:
+                line = f.readline()
+                if not line:
+                    break
+                if line.rstrip() == self.login.text():
+                    self.label_error2.hide()
+                    self.log = self.login.text()
+                    self.pas = self.password.text()
+                    self.postroenieAkkaunta()
+                    break
+                else:
+                    self.label_error2.show()
+
+    def createNewAkkount(self):
+        login = self.create_login.toPlainText()
+        pasword = self.create_passs.toPlainText()
+        if login.isalnum() and pasword.isalnum():
+            with open('files/profils/' + login + '.txt', 'w') as f:
+                f.write(pasword + '\n')
+                f.write(self.create_name.toPlainText() + '\n')
+                if self.pol_jen.isChecked():
+                    f.write("жен" + '\n')
+                else:
+                    f.write("муж" + '\n')
+                f.write(format(self.create_data.dateTime().toString('dd-MM-yyyy')) + '\n')
+                if self.aktivnoct_1.isChecked():
+                    f.write("Сидячий" + '\n')
+                else:
+                    if self.aktivnoct_2.isChecked():
+                        f.write("Умеренный" + '\n')
+                    else:
+                        f.write("Активный" + '\n')
+                if self.create_kurenie.isChecked():
+                    f.write("Курение" + '\n')
+                if self.create_alkogol.isChecked():
+                    f.write("Алкоголь" + '\n')
+                if self.create_narko.isChecked():
+                    f.write("Что-то похуже)" + '\n')
+
+            self.nalichieakkaunta = True
+            self.log = login
+            self.pas = pasword
+            for i in self.winAkkCreate:
+                i.hide()
+            with open('files/list_akk.txt', 'a') as f:
+                f.write('\n' + self.log)
+            with open('files/akk.txt', 'w') as f:
+                f.write('1\n')
+                f.write(self.log + '\n')
+                f.write(self.pas + '\n')
+            self.postroenieAkkaunta()
+        # self.create_label_photo = QtWidgets.QLabel(self.centralwidget)
+
+    def createNewAkkountWindow(self):
+        for i in self.winAkkIN:
+            i.hide()
+        for i in self.winAkkCreate:
+            i.show()
+
+    def exitAkk(self):
+        self.nalichieakkaunta = False
+        with open('files/akk.txt', 'w') as f:
+            f.write('0')
+        for i in self.winAkkIN:
+            i.show()
+        for i in self.winAkk:
+            i.hide()
+        self.create_login.clear()
+        self.create_passs.clear()
 
     def hideBase(self):
         for i in self.ggvp:
@@ -784,6 +883,39 @@ class Window(QMainWindow):
     def hideSetting(self):
         for i in self.winSetting:
             i.hide()
+
+    def setcolors(self, color_1, color_2, color_3, color_4):
+        self.color1 = color_1
+        self.color2 = color_2
+        self.color3 = color_3
+        self.color4 = color_4
+
+        for i in self.fons:
+            i.setStyleSheet("background-color:" + color_2)
+        for i in self.btns:
+            i.setStyleSheet("background-color:" + color_3)
+
+        self.setting.setStyleSheet("border: none;")
+        self.calendar.setStyleSheet("background-color:" + color_2 + "\ngridline-color:" + color_1)
+        self.setStyleSheet("background-color:" + color_1)
+        self.fon_menu.setStyleSheet(color_4)
+        self.sovet_1.setStyleSheet("background-color:" + color_2 + "\npadding :10px")
+        self.sovet_2.setStyleSheet("background-color:" + color_2 + "\npadding :10px")
+
+        with open('files/color.txt', 'w') as f:
+            f.write(color_1 + color_2 + color_3 + color_4)
+
+    def BtnChanseColor1(self):
+        self.setcolors("rgb(238, 212, 189);\n", "rgb(219, 173, 175);\n", "rgb(173, 175, 219); border: none;\n",
+                       "background-color: rgb(205, 185, 172);")
+
+    def BtnChanseColor2(self):
+        self.setcolors("rgb(233, 213, 202);\n", "rgb(193, 164, 149);\n", "rgb(148, 125, 115); border: none;\n",
+                       "background-color: rgb(116, 97, 89);")
+
+    def BtnChanseColor3(self):
+        self.setcolors("rgb(232, 226, 240);\n", "rgb(211, 209, 228);\n", "rgb(226, 203, 219); border: none;\n",
+                       "background-color: rgb(171, 171, 203);")
 
     def mySetFont(self):
         font = QtGui.QFont()
@@ -810,6 +942,7 @@ class Window(QMainWindow):
         self.setFont(font)
         self.label_weather_now.setFont(QtGui.QFont("Segoe UI", 15))
         self.create_label_akk.setFont(QtGui.QFont("Segoe UI", 15))
+        self.label_ask_color.setFont(QtGui.QFont("Segoe UI", 15))
 
     def weather(self):
         segodna = 0
