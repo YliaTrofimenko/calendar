@@ -11,6 +11,7 @@ class Window(QMainWindow):
         self.setWindowIcon(QtGui.QIcon('photo/icon.png'))
         self.centralwidget = QtWidgets.QWidget(self)
         self.setCentralWidget(self.centralwidget)
+        self.photo_akk = 0
 
     # Списки для форматирования
         self.btns = []
@@ -25,21 +26,13 @@ class Window(QMainWindow):
         self.winAkkCreate = []
         self.winSovet = []
         self.winSetting = []
+        self.winAddstess = []
 
         with open('files/color.txt', 'r') as f:
             self.color1 = f.readline()
             self.color2 = f.readline()
             self.color3 = f.readline()
             self.color4 = f.readline()
-
-        with open('files/akk.txt', 'r') as f:
-            m = f.readline()
-            if m == '1\n':
-                self.nalichieakkaunta = True
-                self.log = f.readline().rstrip()
-                self.pas = f.readline().rstrip()
-            else:
-                self.nalichieakkaunta = False
 
 ######## Меню ##########################################################################################################
 
@@ -51,8 +44,19 @@ class Window(QMainWindow):
         self.fons.append(self.photo)
         self.leftMenu.append(self.photo)
 
+        with open('files/akk.txt', 'r') as f:
+            m = f.readline()
+            if m == '1\n':
+                self.nalichieakkaunta = True
+                self.log = f.readline().rstrip()
+                self.pas = f.readline().rstrip()
+                self.photo_akk = f.readline().rstrip()
+                self.photo.setPixmap(QtGui.QPixmap(self.photo_akk).scaled(180, 180))
+            else:
+                self.nalichieakkaunta = False
+
         self.base = QtWidgets.QPushButton(self.centralwidget)
-        self.base.setGeometry(QtCore.QRect(40, 370, 211, 45))
+        self.base.setGeometry(QtCore.QRect(40, 370, 220, 45))
         self.base.setText("Главная")
         self.base.clicked.connect(self.baseWindow)
         self.btns.append(self.base)
@@ -81,14 +85,14 @@ class Window(QMainWindow):
 
 ######## Календарь и заметки ###########################################################################################
 
-        self.calendar = QtWidgets.QCalendarWidget(self.centralwidget)
+        self.calendar = MyCalendar(self.centralwidget)
         self.calendar.setGeometry(QtCore.QRect(300, 23, 640, 400))
         self.calendar.setGridVisible(True)
         self.calendar.setVerticalHeaderFormat(QtWidgets.QCalendarWidget.NoVerticalHeader)
         self.ggvp.append(self.calendar)
 
         self.zametki = QtWidgets.QPlainTextEdit(self.centralwidget)
-        self.zametki.setGeometry(QtCore.QRect(970, 450, 910, 523))
+        self.zametki.setGeometry(QtCore.QRect(970, 450, 640, 523))
         self.fons.append(self.zametki)
         self.ggvp.append(self.zametki)
 
@@ -286,6 +290,7 @@ class Window(QMainWindow):
         self.new_stress = QtWidgets.QPushButton(self.centralwidget)
         self.new_stress.setGeometry(QtCore.QRect(300, 450, 180, 100))
         self.new_stress.setText("Добавить\nзапланированный\nстресс")
+        self.new_stress.clicked.connect(self.addStress)
         self.btns.append(self.new_stress)
         self.ggvp.append(self.new_stress)
 
@@ -294,14 +299,26 @@ class Window(QMainWindow):
         self.sovet_1 = QtWidgets.QLabel(self.centralwidget)
         self.sovet_1.setGeometry(QtCore.QRect(300, 23, 640, 400))
         self.sovet_1.setAlignment(QtCore.Qt.AlignCenter)
-        self.sovet_1.setText("PEITE PIVO CHASHE(V LENTE BUD LIGHT\n PO SKIDKE 30 RUB ZA BANKY)")
+        self.sovet_1.setText("Приятное общение делает человека счастливее. Позвоните другу и\n"
+                             "пригласите его на ужин, напишите письмо доброму знакомому\n"
+                             "или совершите звонок человеку, с которым можно поделиться\n"
+                             "сокровенным.\nИсследования, опубликованные в издании\n"
+                             "PLOS MEDICINE, показали, что люди, у которых крепкие\n"
+                             "социальные связи, имеют более крепкое здоровье и живут\n"
+                             "дольше тех, у кого их нет.")
         self.fons.append(self.sovet_1)
         self.winSovet.append(self.sovet_1)
 
         self.sovet_2 = QtWidgets.QLabel(self.centralwidget)
         self.sovet_2.setGeometry(QtCore.QRect(970, 23, 640, 400))
         self.sovet_2.setAlignment(QtCore.Qt.AlignCenter)
-        self.sovet_2.setText("PO ZAKONU архимеда после сытного обеда\nчтобы жиром не заплыть надо сижку покурить")
+        self.sovet_2.setText("Выработайте режим, который позволит спать семь-восемь часов.\n"
+                             "У недосыпающих больше риск попасть в аварию или подхватить\n"
+                             "болезнь. Кроме того, недостаток сна — это дополнительный\n"
+                             "источник стресса для сердца. Все чаще плохой сон также\n"
+                             "связывают с раком. Всемирная организация здравоохранения\n"
+                             "предупреждает, что нарушение графика сна при работе в ночную\n"
+                             "смену, может стать причиной онкологических заболеваний.")
         self.fons.append(self.sovet_2)
         self.winSovet.append(self.sovet_2)
 
@@ -416,6 +433,23 @@ class Window(QMainWindow):
         self.exit.clicked.connect(self.exitAkk)
         self.btns.append(self.exit)
         self.winAkk.append(self.exit)
+
+######## Реклама #######################################################################################################
+
+        self.reclama1 = QtWidgets.QLabel(self.centralwidget)
+        self.reclama1.setGeometry(QtCore.QRect(1640, 23, 250, 167))  # 577
+        self.ggvp.append(self.reclama1)
+        self.reclama1.setPixmap(QtGui.QPixmap("photo/ad/senator.jpeg").scaled(250, 167))
+
+        self.reclama2 = QtWidgets.QLabel(self.centralwidget)
+        self.reclama2.setGeometry(QtCore.QRect(1640, 217, 250, 250))
+        self.ggvp.append(self.reclama2)
+        self.reclama2.setPixmap(QtGui.QPixmap("photo/ad/microzaim.jpg").scaled(250, 250))
+
+        self.reclama3 = QtWidgets.QLabel(self.centralwidget)
+        self.reclama3.setGeometry(QtCore.QRect(300, 750, 640, 250))
+        self.ggvp.append(self.reclama3)
+        self.reclama3.setPixmap(QtGui.QPixmap("photo/ad/viagra.jpg").scaled(640, 250, QtCore.Qt.KeepAspectRatio))
 
 ######## Страница создания аккаунта ####################################################################################
 
@@ -540,6 +574,13 @@ class Window(QMainWindow):
         self.create_label_photo.setText("Фото профиля:")
         self.winAkkCreate.append(self.create_label_photo)
 
+        self.getPhoto = QtWidgets.QPushButton(self.centralwidget)
+        self.getPhoto.setGeometry(QtCore.QRect(550, 700, 1000, 40))
+        self.getPhoto.setText("Выбор файла")
+        self.getPhoto.clicked.connect(self.getFileName)
+        self.btns.append(self.getPhoto)
+        self.winAkkCreate.append(self.getPhoto)
+
         self.create_new_akk = QtWidgets.QPushButton(self.centralwidget)
         self.create_new_akk.setGeometry(QtCore.QRect(790, 620, 200, 45))
         self.create_new_akk.setText("Создать новый аккаунт")
@@ -558,21 +599,21 @@ class Window(QMainWindow):
         self.col1.setGeometry(QtCore.QRect(300, 100, 180, 45))
         self.col1.setText("Цвета 1")
         self.col1.clicked.connect(self.BtnChanseColor1)
-        self.col1.setStyleSheet("background-color: rgb(173, 175, 219);\nborder: none;")  # база
+        self.col1.setStyleSheet("border-radius: 10px;background-color: rgb(173, 175, 219);\nborder: none;")  # база
         self.winSetting.append(self.col1)
 
         self.col2 = QtWidgets.QPushButton(self.centralwidget)
         self.col2.setGeometry(QtCore.QRect(300, 180, 180, 45))
         self.col2.setText("Цвета 2")
         self.col2.clicked.connect(self.BtnChanseColor2)
-        self.col2.setStyleSheet("background-color: rgb(148, 125, 115);\nborder: none;")  # кофе
+        self.col2.setStyleSheet("border-radius: 10px;background-color: rgb(148, 125, 115);\nborder: none;")  # кофе
         self.winSetting.append(self.col2)
 
         self.col3 = QtWidgets.QPushButton(self.centralwidget)
         self.col3.setGeometry(QtCore.QRect(300, 260, 180, 45))
         self.col3.setText("Цвета 3")
         self.col3.clicked.connect(self.BtnChanseColor3)
-        self.col3.setStyleSheet("background-color: rgb(226, 203, 219);\nborder: none;")  # лиловый
+        self.col3.setStyleSheet("border-radius: 10px;background-color: rgb(226, 203, 219);\nborder: none;")  # лиловый
         self.winSetting.append(self.col3)
 
 ######## Меню добавления плохого самочувствия ##########################################################################
@@ -625,30 +666,31 @@ class Window(QMainWindow):
         self.winAddpein.append(self.check_pein_6)
 
         self.checkStress = QtWidgets.QCheckBox(self.centralwidget)
-        self.checkStress.setGeometry(QtCore.QRect(320, 490, 420, 40))
+        self.checkStress.setGeometry(QtCore.QRect(1015, 323, 420, 40))
         self.checkStress.setText("Стресс")
         self.fons.append(self.checkStress)
         self.winAddpein.append(self.checkStress)
 
         self.checkAlko = QtWidgets.QCheckBox(self.centralwidget)
-        self.checkAlko.setGeometry(QtCore.QRect(320, 530, 420, 40))
+        self.checkAlko.setGeometry(QtCore.QRect(1015, 363, 420, 40))
         self.checkAlko.setText("Употребление алкоголя")
         self.fons.append(self.checkAlko)
         self.winAddpein.append(self.checkAlko)
 
         self.label_kolvo_sna = QtWidgets.QLabel(self.centralwidget)
-        self.label_kolvo_sna.setGeometry(QtCore.QRect(300, 570, 440, 40))
+        self.label_kolvo_sna.setGeometry(QtCore.QRect(1015, 403, 440, 40))
         self.label_kolvo_sna.setText("Количество сна:")
         self.fons.append(self.label_kolvo_sna)
         self.winAddpein.append(self.label_kolvo_sna)
 
         self.horizontalSlider_son = QtWidgets.QSlider(self.centralwidget)
-        self.horizontalSlider_son.setGeometry(QtCore.QRect(313, 610, 385, 20))
+        self.horizontalSlider_son.setGeometry(QtCore.QRect(1025, 443, 385, 20))
         self.horizontalSlider_son.setOrientation(QtCore.Qt.Horizontal)
         self.winAddpein.append(self.horizontalSlider_son)
+        self.fons.append(self.horizontalSlider_son)
 
         self.label_son = QtWidgets.QLabel(self.centralwidget)
-        self.label_son.setGeometry(QtCore.QRect(315, 630, 420, 30))
+        self.label_son.setGeometry(QtCore.QRect(1028, 463, 420, 30))
         self.label_son.setText("0    1    2    3    4    5    6    7    8    9    10    11    12+")
         self.fons.append(self.label_son)
         self.winAddpein.append(self.label_son)
@@ -660,7 +702,47 @@ class Window(QMainWindow):
         self.btns.append(self.add_new_pein)
         self.winAddpein.append(self.add_new_pein)
 
-########################################################################################################################
+######## Меню добавления стресса #######################################################################################
+
+        self.fonAddStress = QtWidgets.QLabel(self.centralwidget)
+        self.fonAddStress.setGeometry(QtCore.QRect(300, 450, 640, 523))
+        self.fons.append(self.fonAddStress)
+        self.winAddstess.append(self.fonAddStress)
+
+        self.label_ask_sress = QtWidgets.QLabel(self.centralwidget)
+        self.label_ask_sress.setGeometry(QtCore.QRect(360, 480, 400, 40))
+        self.label_ask_sress.setText("Даты стресса:")
+        self.fons.append(self.label_ask_sress)
+        self.winAddstess.append(self.label_ask_sress)
+
+        self.create_data_stress = QtWidgets.QDateEdit(self.centralwidget)
+        self.create_data_stress.setGeometry(QtCore.QRect(360, 530, 180, 40))
+        self.create_data_stress.setMaximumDate(QtCore.QDate(2024, 1, 1))
+        self.create_data_stress.setMinimumDate(QtCore.QDate(2023, 22, 1))
+        self.winAddstess.append(self.create_data_stress)
+
+        self.create_data_stress2 = QtWidgets.QDateEdit(self.centralwidget)
+        self.create_data_stress2.setGeometry(QtCore.QRect(600, 530, 180, 40))
+        self.create_data_stress2.setMaximumDate(QtCore.QDate(2024, 1, 1))
+        self.create_data_stress2.setMinimumDate(QtCore.QDate(2023, 22, 4))
+        self.winAddstess.append(self.create_data_stress2)
+
+        self.label_ask_sress_prichina = QtWidgets.QLabel(self.centralwidget)
+        self.label_ask_sress_prichina.setGeometry(QtCore.QRect(360, 600, 400, 40))
+        self.label_ask_sress_prichina.setText("Причина:")
+        self.fons.append(self.label_ask_sress_prichina)
+        self.winAddstess.append(self.label_ask_sress_prichina)
+
+        self.prichina_stressa = QtWidgets.QLineEdit(self.centralwidget)
+        self.prichina_stressa.setGeometry(QtCore.QRect(360, 650, 450, 40))
+        self.winAddstess.append(self.prichina_stressa)
+
+        self.add_new_stress = QtWidgets.QPushButton(self.centralwidget)
+        self.add_new_stress.setGeometry(QtCore.QRect(730, 885, 180, 60))
+        self.add_new_stress.setText("Добавить")
+        self.add_new_stress.clicked.connect(self.addaddStress)
+        self.btns.append(self.add_new_stress)
+        self.winAddstess.append(self.add_new_stress)
 
     # Форматирование
         self.mySetFont()
@@ -670,18 +752,45 @@ class Window(QMainWindow):
 
     # Установка цветов
         self.setcolors(self.color1, self.color2, self.color3, self.color4)
-        self.base.setStyleSheet("border: none;")
-        self.setting.setStyleSheet("background-color:" + self.color3)
+        self.base.setStyleSheet("border-radius: 10px;border: none;")
+        self.setting.setStyleSheet("border-radius: 10px;background-color:" + self.color3)
 
     # Скрытие ненужных окон
         self.hideSovets()
         self.hideProfile()
         self.hideSetting()
         self.hideAddPein()
+        self.hideAddStress()
+
+    # Отметки на календаре
+        if self.nalichieakkaunta:
+            with open('files/profils/stress' + self.log + '.txt', 'r') as f:
+                while True:
+                    d0 = f.readline().rstrip()
+                    d1 = f.readline().rstrip()
+                    p = f.readline().rstrip()
+                    if not d0 and not d1:
+                        break
+                    d0 = QtCore.QDate.fromString(d0, 'ddMMyyyy')
+                    d1 = QtCore.QDate.fromString(d1, 'ddMMyyyy')
+                    while d0 <= d1:
+                        d = d0.toString('ddMMyyyy')
+                        MyCalendar.events.append(QtCore.QDate.fromString(d, 'ddMMyyyy'))
+                        if QtCore.QDate.fromString(d, 'ddMMyyyy') > QtCore.QDate.currentDate():
+                            if QtCore.QDate.fromString(d, 'ddMMyyyy') in MyCalendar.veroatnost:
+                                MyCalendar.veroatnost[QtCore.QDate.fromString(d, 'ddMMyyyy')] += 40
+                            else:
+                                MyCalendar.veroatnost[QtCore.QDate.fromString(d, 'ddMMyyyy')] = 40
+                        d0 = d0.addDays(1)
 
     def addPein(self):
         self.new_pain.hide()
         for i in self.winAddpein:
+            i.show()
+
+    def addStress(self):
+        self.new_stress.hide()
+        for i in self.winAddstess:
             i.show()
 
     def addaddPein(self):
@@ -689,19 +798,47 @@ class Window(QMainWindow):
             i.hide()
         self.new_pain.show()
 
+    def addaddStress(self):
+        if self.create_data_stress.dateTime().msecsTo(self.create_data_stress2.dateTime()) > 0:
+            for i in self.winAddstess:
+                i.hide()
+            self.new_stress.show()
+            d0 = self.create_data_stress.dateTime()
+            d1 = self.create_data_stress2.dateTime()
+            while d0 <= d1:
+                d = d0.toString('ddMMyyyy')
+                MyCalendar.events.append(QtCore.QDate.fromString(d, 'ddMMyyyy'))
+                if QtCore.QDate.fromString(d, 'ddMMyyyy') > QtCore.QDate.currentDate():
+                    if QtCore.QDate.fromString(d, 'ddMMyyyy') in MyCalendar.veroatnost:
+                        MyCalendar.veroatnost[QtCore.QDate.fromString(d, 'ddMMyyyy')] += 40
+                    else:
+                        MyCalendar.veroatnost[QtCore.QDate.fromString(d, 'ddMMyyyy')] = 40
+                d0 = d0.addDays(1)
+            self.calendar.updtt()
+
+            if self.nalichieakkaunta:
+                with open('files/profils/stress' + self.log + '.txt', 'a') as f:
+                    f.write(format(self.create_data_stress.dateTime().toString('ddMMyyyy')) + '\n')
+                    f.write(format(self.create_data_stress2.dateTime().toString('ddMMyyyy')) + '\n')
+                    f.write(self.prichina_stressa.text() + '\n')
+
     def hideAddPein(self):
         for i in self.winAddpein:
             i.hide()
 
-    def baseWindow(self):
-        self.base.setStyleSheet("border: none;")
-        self.base.setGeometry(QtCore.QRect(40, 370, 211, 45))
+    def hideAddStress(self):
+        for i in self.winAddstess:
+            i.hide()
 
-        self.sovets.setStyleSheet("background-color:" + self.color3)
+    def baseWindow(self):
+        self.base.setStyleSheet("border-radius: 10px;border: none;")
+        self.base.setGeometry(QtCore.QRect(40, 370, 220, 45))
+
+        self.sovets.setStyleSheet("border-radius: 10px;background-color:" + self.color3)
         self.sovets.setGeometry(QtCore.QRect(25, 430, 180, 45))
-        self.profile.setStyleSheet("background-color:" + self.color3)
+        self.profile.setStyleSheet("border-radius: 10px;background-color:" + self.color3)
         self.profile.setGeometry(QtCore.QRect(25, 490, 180, 45))
-        self.setting.setStyleSheet("background-color:" + self.color3)
+        self.setting.setStyleSheet("border-radius: 10px;background-color:" + self.color3)
         self.setting.setGeometry(QtCore.QRect(25, 550, 180, 45))
 
         self.hideSovets()
@@ -712,37 +849,41 @@ class Window(QMainWindow):
             i.show()
 
     def sovetsWindow(self):
-        self.sovets.setStyleSheet("border: none;")
-        self.sovets.setGeometry(QtCore.QRect(40, 430, 211, 45))
+        self.sovets.setStyleSheet("border-radius: 10px;border: none;")
+        self.sovets.setGeometry(QtCore.QRect(40, 430, 220, 45))
 
-        self.base.setStyleSheet("background-color:" + self.color3)
+        self.base.setStyleSheet("border-radius: 10px;background-color:" + self.color3)
         self.base.setGeometry(QtCore.QRect(25, 370, 180, 45))
-        self.profile.setStyleSheet("background-color:" + self.color3)
+        self.profile.setStyleSheet("border-radius: 10px;background-color:" + self.color3)
         self.profile.setGeometry(QtCore.QRect(25, 490, 180, 45))
-        self.setting.setStyleSheet("background-color:" + self.color3)
+        self.setting.setStyleSheet("border-radius: 10px;background-color:" + self.color3)
         self.setting.setGeometry(QtCore.QRect(25, 550, 180, 45))
 
         self.hideBase()
         self.hideProfile()
         self.hideSetting()
+        self.hideAddPein()
+        self.hideAddStress()
 
         for i in self.winSovet:
             i.show()
 
     def profileWindow(self):
-        self.profile.setStyleSheet("border: none;")
-        self.profile.setGeometry(QtCore.QRect(40, 490, 211, 45))
+        self.profile.setStyleSheet("border-radius: 10px;border: none;")
+        self.profile.setGeometry(QtCore.QRect(40, 490, 220, 45))
 
-        self.base.setStyleSheet("background-color:" + self.color3)
+        self.base.setStyleSheet("border-radius: 10px;background-color:" + self.color3)
         self.base.setGeometry(QtCore.QRect(25, 370, 180, 45))
-        self.sovets.setStyleSheet("background-color:" + self.color3)
+        self.sovets.setStyleSheet("border-radius: 10px;background-color:" + self.color3)
         self.sovets.setGeometry(QtCore.QRect(25, 430, 180, 45))
-        self.setting.setStyleSheet("background-color:" + self.color3)
+        self.setting.setStyleSheet("border-radius: 10px;background-color:" + self.color3)
         self.setting.setGeometry(QtCore.QRect(25, 550, 180, 45))
 
         self.hideBase()
         self.hideSovets()
         self.hideSetting()
+        self.hideAddPein()
+        self.hideAddStress()
 
         if self.nalichieakkaunta:
             self.postroenieAkkaunta()
@@ -751,19 +892,21 @@ class Window(QMainWindow):
                 i.show()
 
     def settingWindow(self):
-        self.setting.setStyleSheet("border: none;")
-        self.setting.setGeometry(QtCore.QRect(40, 550, 211, 45))
+        self.setting.setStyleSheet("border-radius: 10px;border: none;")
+        self.setting.setGeometry(QtCore.QRect(40, 550, 220, 45))
 
-        self.base.setStyleSheet("background-color:" + self.color3)
+        self.base.setStyleSheet("border-radius: 10px;background-color:" + self.color3)
         self.base.setGeometry(QtCore.QRect(25, 370, 180, 45))
-        self.sovets.setStyleSheet("background-color:" + self.color3)
+        self.sovets.setStyleSheet("border-radius: 10px;background-color:" + self.color3)
         self.sovets.setGeometry(QtCore.QRect(25, 430, 180, 45))
-        self.profile.setStyleSheet("background-color:" + self.color3)
+        self.profile.setStyleSheet("border-radius: 10px;background-color:" + self.color3)
         self.profile.setGeometry(QtCore.QRect(25, 490, 180, 45))
 
         self.hideBase()
         self.hideSovets()
         self.hideProfile()
+        self.hideAddPein()
+        self.hideAddStress()
 
         for i in self.winSetting:
             i.show()
@@ -781,14 +924,37 @@ class Window(QMainWindow):
                 self.data_in_akk.setText(f.readline().rstrip())
                 self.obraz_zizni.setText(f.readline().rstrip())
                 self.vrednie_privichki.setText(f.readline().rstrip())
+                self.photo_akk = f.readline().rstrip()
+                if self.photo_akk != 0:
+                    self.photo_in_akk.setPixmap(QtGui.QPixmap(self.photo_akk).scaled(250, 250))
+                    self.photo.setPixmap(QtGui.QPixmap(self.photo_akk).scaled(180, 180))
                 self.nalichieakkaunta = True
-                with open('files/akk.txt', 'w') as f:
-                    f.write('1\n')
-                    f.write(self.log + '\n')
-                    f.write(self.pas + '\n')
+                with open('files/akk.txt', 'w') as p:
+                    p.write('1\n')
+                    p.write(self.log + '\n')
+                    p.write(self.pas + '\n')
+                    p.write(self.photo_akk + '\n')
                 for i in self.winAkkIN:
                     i.hide()
-
+                with open('files/profils/stress' + self.log + '.txt', 'r') as f:
+                    while True:
+                        d0 = f.readline().rstrip()
+                        d1 = f.readline().rstrip()
+                        p = f.readline().rstrip()
+                        if not d0 and not d1:
+                            break
+                        d0 = QtCore.QDate.fromString(d0, 'ddMMyyyy')
+                        d1 = QtCore.QDate.fromString(d1, 'ddMMyyyy')
+                        while d0 <= d1:
+                            d = d0.toString('ddMMyyyy')
+                            MyCalendar.events.append(QtCore.QDate.fromString(d, 'ddMMyyyy'))
+                            if QtCore.QDate.fromString(d, 'ddMMyyyy') > QtCore.QDate.currentDate():
+                                if QtCore.QDate.fromString(d, 'ddMMyyyy') in MyCalendar.veroatnost:
+                                    MyCalendar.veroatnost[QtCore.QDate.fromString(d, 'ddMMyyyy')] += 40
+                                else:
+                                    MyCalendar.veroatnost[QtCore.QDate.fromString(d, 'ddMMyyyy')] = 40
+                            d0 = d0.addDays(1)
+                        self.calendar.updtt()
             else:
                 self.label_error1.show()
 
@@ -803,6 +969,7 @@ class Window(QMainWindow):
                     self.log = self.login.text()
                     self.pas = self.password.text()
                     self.postroenieAkkaunta()
+                    self.weather()
                     break
                 else:
                     self.label_error2.show()
@@ -827,11 +994,13 @@ class Window(QMainWindow):
                     else:
                         f.write("Активный" + '\n')
                 if self.create_kurenie.isChecked():
-                    f.write("Курение" + '\n')
+                    f.write("Курение ")
                 if self.create_alkogol.isChecked():
-                    f.write("Алкоголь" + '\n')
+                    f.write("Алкоголь ")
                 if self.create_narko.isChecked():
-                    f.write("Что-то похуже)" + '\n')
+                    f.write("Что-то похуже) ")
+                f.write('\n' + self.photo_akk)
+            open('files/profils/stress' + login + '.txt', 'w')
 
             self.nalichieakkaunta = True
             self.log = login
@@ -844,8 +1013,8 @@ class Window(QMainWindow):
                 f.write('1\n')
                 f.write(self.log + '\n')
                 f.write(self.pas + '\n')
+                f.write(self.photo_akk + '\n')
             self.postroenieAkkaunta()
-        # self.create_label_photo = QtWidgets.QLabel(self.centralwidget)
 
     def createNewAkkountWindow(self):
         for i in self.winAkkIN:
@@ -861,8 +1030,10 @@ class Window(QMainWindow):
             i.show()
         for i in self.winAkk:
             i.hide()
-        self.create_login.clear()
-        self.create_passs.clear()
+        self.photo.setPixmap(QtGui.QPixmap())
+        MyCalendar.events = []
+        MyCalendar.veroatnost = {}
+        self.calendar.updtt()
 
     def hideBase(self):
         for i in self.ggvp:
@@ -893,29 +1064,30 @@ class Window(QMainWindow):
         for i in self.fons:
             i.setStyleSheet("background-color:" + color_2)
         for i in self.btns:
-            i.setStyleSheet("background-color:" + color_3)
+            i.setStyleSheet("border-radius: 10px;background-color:" + color_3)
 
-        self.setting.setStyleSheet("border: none;")
-        self.calendar.setStyleSheet("background-color:" + color_2 + "\ngridline-color:" + color_1)
+        self.setting.setStyleSheet("border-radius: 10px;border: none;")
+        self.calendar.setStyleSheet("outline: 0px;border-radius: 10px;selection-background-color:" + color_3 + ";background-color:" + color_2 + "\ngridline-color:" + color_1)
         self.setStyleSheet("background-color:" + color_1)
         self.fon_menu.setStyleSheet(color_4)
-        self.sovet_1.setStyleSheet("background-color:" + color_2 + "\npadding :10px")
-        self.sovet_2.setStyleSheet("background-color:" + color_2 + "\npadding :10px")
+        self.photo.setStyleSheet(color_4)
+        self.sovet_1.setStyleSheet("border-radius: 10px;background-color:" + color_2 + "\npadding :10px")
+        self.sovet_2.setStyleSheet("border-radius: 10px;background-color:" + color_2 + "\npadding :10px")
 
         with open('files/color.txt', 'w') as f:
             f.write(color_1 + color_2 + color_3 + color_4)
 
     def BtnChanseColor1(self):
         self.setcolors("rgb(238, 212, 189);\n", "rgb(219, 173, 175);\n", "rgb(173, 175, 219); border: none;\n",
-                       "background-color: rgb(205, 185, 172);")
+                       "background-color: rgb(205, 185, 172);border-radius: 10px;")
 
     def BtnChanseColor2(self):
         self.setcolors("rgb(233, 213, 202);\n", "rgb(193, 164, 149);\n", "rgb(148, 125, 115); border: none;\n",
-                       "background-color: rgb(116, 97, 89);")
+                       "background-color: rgb(116, 97, 89);border-radius: 10px;")
 
     def BtnChanseColor3(self):
         self.setcolors("rgb(232, 226, 240);\n", "rgb(211, 209, 228);\n", "rgb(226, 203, 219); border: none;\n",
-                       "background-color: rgb(171, 171, 203);")
+                       "background-color: rgb(171, 171, 203);border-radius: 10px;")
 
     def mySetFont(self):
         font = QtGui.QFont()
@@ -938,6 +1110,8 @@ class Window(QMainWindow):
             i.setFont(font)
         for i in self.winSetting:
             i.setFont(font)
+        for i in self.winAddstess:
+            i.setFont(font)
 
         self.setFont(font)
         self.label_weather_now.setFont(QtGui.QFont("Segoe UI", 15))
@@ -952,6 +1126,7 @@ class Window(QMainWindow):
         weather_now1 = ""
         l__00, l__03, l__06, l__09, l__12, l__15, l__18, l__21 = "~", "~", "~", "~", "~", "~", "~", "~"
         weath_tomm, weath_tomm2, weath_tomm3, weath_tomm4, weath_tomm5 = 0, 0, 0, 0, 0
+        wn = 0
 
         try:
             res = requests.get("http://api.openweathermap.org/data/2.5/find",
@@ -972,6 +1147,7 @@ class Window(QMainWindow):
             weather_now_conditions = data['weather'][0]['description']
             weather_now_min = data['main']['temp_min']
             weather_now_max = data['main']['temp_max']
+            wn = (weather_now_max + weather_now_min) / 2
         except Exception as e:
             print("Exception (weather):", e)
             pass
@@ -1058,3 +1234,99 @@ class Window(QMainWindow):
         self.label_weather_tomorrow_3.setText(str(round(weath_tomm3 / 8)))
         self.label_weather_tomorrow_4.setText(str(round(weath_tomm4 / 8)))
         self.label_weather_tomorrow_5.setText(str(round(weath_tomm5)))
+
+        s = QtCore.QDate.currentDate()
+        s = s.addDays(1)
+        if abs(wn - weath_tomm / 8) > 10:
+            d = s.toString('ddMMyyyy')
+            if QtCore.QDate.fromString(d, 'ddMMyyyy') in MyCalendar.veroatnost:
+                MyCalendar.veroatnost[QtCore.QDate.fromString(d, 'ddMMyyyy')] += 30
+            else:
+                MyCalendar.veroatnost[QtCore.QDate.fromString(d, 'ddMMyyyy')] = 30
+        else:
+            d = s.toString('ddMMyyyy')
+            if not (QtCore.QDate.fromString(d, 'ddMMyyyy') in MyCalendar.veroatnost):
+                MyCalendar.veroatnost[QtCore.QDate.fromString(d, 'ddMMyyyy')] = 0
+        s = s.addDays(1)
+        if abs(weath_tomm / 8 - weath_tomm2 / 8) > 10:
+            d = s.toString('ddMMyyyy')
+            if QtCore.QDate.fromString(d, 'ddMMyyyy') in MyCalendar.veroatnost:
+                MyCalendar.veroatnost[QtCore.QDate.fromString(d, 'ddMMyyyy')] += 30
+            else:
+                MyCalendar.veroatnost[QtCore.QDate.fromString(d, 'ddMMyyyy')] = 30
+        else:
+            d = s.toString('ddMMyyyy')
+            if not (QtCore.QDate.fromString(d, 'ddMMyyyy') in MyCalendar.veroatnost):
+                MyCalendar.veroatnost[QtCore.QDate.fromString(d, 'ddMMyyyy')] = 0
+        s = s.addDays(1)
+        if abs(weath_tomm2 / 8 - weath_tomm3 / 8) > 10:
+            d = s.toString('ddMMyyyy')
+            if QtCore.QDate.fromString(d, 'ddMMyyyy') in MyCalendar.veroatnost:
+                MyCalendar.veroatnost[QtCore.QDate.fromString(d, 'ddMMyyyy')] += 30
+            else:
+                MyCalendar.veroatnost[QtCore.QDate.fromString(d, 'ddMMyyyy')] = 30
+        else:
+            d = s.toString('ddMMyyyy')
+            if not (QtCore.QDate.fromString(d, 'ddMMyyyy') in MyCalendar.veroatnost):
+                MyCalendar.veroatnost[QtCore.QDate.fromString(d, 'ddMMyyyy')] = 0
+        s = s.addDays(1)
+        if abs(weath_tomm3 / 8 - weath_tomm4 / 8) > 10:
+            d = s.toString('ddMMyyyy')
+            if QtCore.QDate.fromString(d, 'ddMMyyyy') in MyCalendar.veroatnost:
+                MyCalendar.veroatnost[QtCore.QDate.fromString(d, 'ddMMyyyy')] += 30
+            else:
+                MyCalendar.veroatnost[QtCore.QDate.fromString(d, 'ddMMyyyy')] = 30
+        else:
+            d = s.toString('ddMMyyyy')
+            if not (QtCore.QDate.fromString(d, 'ddMMyyyy') in MyCalendar.veroatnost):
+                MyCalendar.veroatnost[QtCore.QDate.fromString(d, 'ddMMyyyy')] = 0
+        s = s.addDays(1)
+        if abs(weath_tomm4 / 8 - weath_tomm5 / 8) > 10:
+            d = s.toString('ddMMyyyy')
+            if QtCore.QDate.fromString(d, 'ddMMyyyy') in MyCalendar.veroatnost:
+                MyCalendar.veroatnost[QtCore.QDate.fromString(d, 'ddMMyyyy')] += 30
+            else:
+                MyCalendar.veroatnost[QtCore.QDate.fromString(d, 'ddMMyyyy')] = 30
+        else:
+            d = s.toString('ddMMyyyy')
+            if not (QtCore.QDate.fromString(d, 'ddMMyyyy') in MyCalendar.veroatnost):
+                MyCalendar.veroatnost[QtCore.QDate.fromString(d, 'ddMMyyyy')] = 0
+        self.calendar.updtt()
+
+    def getFileName(self):
+        filename, filetype = QtWidgets.QFileDialog.getOpenFileName(self, "Выбрать файл", ".",
+                                                                   "All Files(*);;"
+                                                                   "JPEG Files(*.jpeg);;"
+                                                                   "PNG Files(*.png);;"
+                                                                   "GIF File(*.gif)")
+        self.getPhoto.setText("Выбрали файл: {}".format(filename))
+        self.photo_akk = filename
+
+
+class MyCalendar(QtWidgets.QCalendarWidget):
+    def __init__(self, parent=None):
+        QtWidgets.QCalendarWidget.__init__(self, parent)
+
+    events = []
+    veroatnost = {}
+
+    def paintCell(self, painter, rect, date):
+        QtWidgets.QCalendarWidget.paintCell(self, painter, rect, date)
+        if date == date.currentDate():
+            painter.setBrush(QtGui.QColor(80, 80, 80, 80))
+            painter.setPen(QtGui.QColor(0, 0, 0, 0))
+            painter.drawRect(rect)
+
+        if date in self.events:
+            painter.setBrush(QtCore.Qt.red)
+            painter.drawEllipse(rect.topLeft() + QtCore.QPoint(12, 7), 5, 5)
+
+        if date in self.veroatnost:
+            painter.setPen(QtGui.QColor(168, 34, 3))
+            painter.setFont(QtGui.QFont('Decorative', 10))
+            painter.drawText(QtCore.QRectF(rect), QtCore.Qt.TextSingleLine | QtCore.Qt.AlignCenter, str(date.day()))
+            painter.drawText(rect, QtCore.Qt.AlignCenter, str(self.veroatnost[date]) + '%\n\n')
+            painter.restore()
+
+    def updtt(self):
+        self.updateCells()

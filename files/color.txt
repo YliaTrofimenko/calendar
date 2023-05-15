@@ -1,4 +1,4 @@
 rgb(233, 213, 202);
 rgb(193, 164, 149);
 rgb(148, 125, 115); border: none;
-background-color: rgb(116, 97, 89);
+background-color: rgb(116, 97, 89);border-radius: 10px;
